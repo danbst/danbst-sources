@@ -1,0 +1,114 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+
+\title{On A Class of Error Correcting Binary Group Codes}
+\date{}
+\begin{document}
+\maketitle
+R. C. Bose and D. K. Ray-Chaudhuri
+
+University of North Carolina and Case Institute of Technology
+
+A general method of constructing error correcting binary group codes is obtained. A binary group code with $n$ places, $ k$ of which are information places is called an $(n,k)$ code. An explicit method of constructing $t$-error correcting $(n,k)$ codes is given for $n=2^m-1$ and $k=2^m-1-R(m,t) \geqq 2^m-1-mt$ where $R(m,t)$ is a function of $m$ and $t$ which cannot exceed $mt$. An example is worked out to illustrate the method of construction.
+
+Section 1
+
+Consider a binary channel which can transmit either of two symbols 0 or 1. Howewer, due to the presence of "noise" a transmittes zero may sometimes be received as 1, and sometimes be received as 0. When this happens we say that there is an error in transmitting a symbol. The symbols successively presented to the channel for transmission constitute the "input" and the symbols received constitute the "output".
+
+A $v$-letter $n$-place binary signalling alphabet $A_n$ may be defined as a set of $v$ distinct sequences $\alpha_0,\alpha_1, \dots, \alpha_{v-1}$ of $n$ binary digits. The individual sequences may be called the letters of the alphabet. Given a set of $v$ distinct messages over the channel the $n$ individual symbols of the corresponding letter of the alphabet are presented to the channel in succession. The output is then an $n$-place binary sequence belonging to the set $B_n$ of all possible binary sequences. A decoder $D_{n,v}$ is obtained by partitioning $B_n$ into $v$ disjoint sets $S_1, S_2, \dots, S_v$ and setting up a correspondence between these subsets and the letters of the alphabet so that if a sequence belonging to $S_i$ is received as an output, it is read as the letter $\alpha_u$ and interpreted as the corresponding message. The encoder $E_{n,v}$ together with the decoder $D_{n,v}$ constitute a binary $n$-place code.
+
+Each sequence of $B_n$ can be regarded as an $n$-vector with elements from the Galois foeld $GF(2)$. The addition of these vectors being obtained by adding the corresponding elements (mod 2). For example, if $n=6$ and $\gamma_1=(110011)$ and $\gamma_2=(101001)$ then $\gamma_1+\gamma_2=(011010)$. Clearly the set $B_n$ of all binary $n$-place sequences forms a group under vector addition. The weight $w(\gamma)$ of any sequence is defined as the number of unities in the seqence. Thus in the example considered $w(\gamma_1)=4, w(\gamma_2)=3$. The Hamming distance $d(\gamma_1, \gamma_2)$ between two sequences $\gamma_1$ and $\gamma_2$ is defined as the number of places in which $\gamma_1$ and $\gamma_2$ do not match (Hamming, 1950). Clearly $d(\gamma_1, \gamma_2)=w(\gamma_1+\gamma_2)$. In this example $d(\gamma_1, \gamma_2)=3=w(\gamma_1+\gamma_2)$. The Hamming distance satisfies the three conditions for a metric, namely\\
+(a) $d(\gamma_1, \gamma_2)=0$ if and only if $\gamma_1=\gamma_2$.\\
+(b) $d(\gamma_1, \gamma_2)=d(\gamma_2, \gamma_1)$,\\
+(c) $d(\gamma_1, \gamma_2)+d(\gamma_2, \gamma_3) \geqq d(\gamma_1, \gamma_3)$.\\
+
+Let the letter $\alpha_i$ of the alphabet $A_n$ be tranmitted over the channel. Let $\epsilon_i$ be the vector which has unities in those places, where an error occurs in transmitting a symbol of $\alpha_i$. Then $\epsilon_i$, and the number of errors is $w(\epsilon_i)\leqq t(i=0,1\cdots,v-1)$. It is clear that under these circumstances if there are $t$ or a lesser number of errors in transmitting a letter $\alpha_i$? the received message will be correctly interpreted.
+
+A particularly important class of codes has been studied by Slepian (1956)/ For this class $v=2^k$ and the letters of the alphabet $A_n$ form a subgroup of $B_n$. The null sequence is the unit element of $B_n$, and must also belong to $A_n$/ We shall suppose without loss of generality that $a_0=(0,0,\cdots,0)$. Slepian's decoder may be described as follows: If $r=n-k$, then the group $B_n$ can be partitioned into $2^r$ cosets with respect to the subgroup $A_n$/ The cost contaning a particular sequence $\beta$ consists of the sequences 
+
+$\alpha_0+\beta,\alpha_1+\beta,\cdots,\alpha_{v-1}+\beta$.
+
+In the $j$th coset we can choose a sequence $\beta_j$ whose weight does bot exceed the weight of any other sequence in the coset leader. Let $\beta_0,\beta_1,\cdots,\beta_{u-1},(u=2^r)$ be the coset leaders, where $\beta_0=\alpha_0$ is the null sequence and leader of the 0th coset $A_n$. Let $S_j$ be the set of sequences
+
+$\alpha_j+\beta_0,\alpha_j+\beta_1,\cdots,\alpha_j+\beta_{u-1}\;\;\; j=0,1,\cdots,v-1$.
+
+Then the decoder is obtained by partitioning $B_n$ into $S_0,S_1,\cdots,S_{v-1}$ and setting up the rule that if the sequence received as an output belongs to $S_j$, it is read as the letter $\alpha_j$. The code thus obtained may be called an $(n,k)$ binary group code. It is clearthat a transmitted message will be correctly interpreted if and only if the error vector happens to be a coset leader. Hense a necessary and sufficient condition for the code to be $t$-error correcting is that if $\beta$ is a coset leader. The following lemma, due to Hamming (1950), is then easy to deduce.
+
+Lemma 1. the necessary and sufficient codition for an $(n,k)$ binary froup code to be $t$-error correcting is that each letter of the alphabet except the null letter has weight $2t+1$ or more.
+
+Since the $v=2^k$ messages can be transmitted by a $k$-place binary code if there is no possibility of error, the number $r=n-k$ is called the redundancy for an $(n,k)$ binary group code for given $n$ and $t$ one would like to maximize $k$ (that is, maximize the number of different messages that it is possible to transmit). Varsamov (1957) has shown that if $k$ satisfies the inequality
+
+$S_r^{2t-1}+()S_r^{2t-2}+\cdots+()S_r^1+()<2^r    \;\;\;(1)$
+
+where 
+
+$S_r^q=1+()+()+\cdots+()\;\;\;\;\;(2)$
+
+then a $t$-error correcting $(n,k)$ group code exists.
+
+The main result of the present paper is the following: If $n=2^m-1$, then there exists a $t$-error correcting $(n,k)$ binary group code with $k\geqq 2^m-1-mt$.
+
+The method of proof is constructive and is illustrated by considering the case $n=15,t=3$, for which a 3-error correcting $(15,5)$ binary group code is explicitly obtained.
+
+As an example of comparision beetween Varsamov's result and our theorem consider the case $n=31$. Varsamov's result then shows that a 2-error correcting binary group code can be obtained with $k=18$ and a 3-error correcting binary group code can be obtaned with $k=13$ but is inconclusive for larger values of $k$. Our method, howewer, gives an explicit construction for a 2-error correcting binary group code with $k=21$, and a 3-error correcting binary group code with $k=16$.
+
+The following table gives some of the values of $n,k$ and $t$ for which a $t$-error correcting $(n,k)$ binary group code can be constructed by our method. The transmission rate $R=k/n$ is also given.
+
+TABLE1
+
+SECTION 2
+
+We shall now prove a theorem which gives a necessary and sufficient condition for the existence of a $t$-error correcting $(n,k)$ group code. This theorem appears in a different form in an earlier paper by Bose (1947) but is given here for the sake of completness.
+
+Theorem 1. The necessary and sufficient codition for existence of a $t$-error correcting $(n,k)$ binary group code is the existence of a matrix $A$ of order $n\times r$ and rank $r=n-k$ with elements from $GF(2)$, such that any set of $2t$ row vectors from $A$ are independent.
+
+Proof of Sufficiency. The matrix $A$ has the property $(P_{2t})$ that any $2t$ row vectors of $A$ are independent. Clearly $r\geqq 2t$. The property $(P_{2t})$ is invariant under the following operations: (1) interchange of two rows or columns and (2) replacement of the $i$th column by the sum of $i$th and $j$th column, $i\neq j$. By these operations $A$ can e transformed to the matrix.
+
+MATRIX (3)
+
+where $A*$ has the property $(P_{2t})$, $I_r$ is the unit matrix of order $r$, and $C$ is a matrix of order $k\times r$. Consider the matrix
+
+MATRIX (4)
+
+Then $C*$ is of order $k\times n$. We shall show that the $k$ rows of $C*$ (under vector addition (mod 2)) are generators of a group $G$ of order $2^k$ such that if any arbitrary (nonnull) element of G, then $w(\alpha)\geqq2t+1$. Let $\alpha$ be the sum of any $d$ row vectors of $C*, d\leqq k$. We can write $\alpha=((\gamma,\epsilon)$, where $\gamma$ is the part coming from $C$ and $\epsilon$ the part coming from $I_k$. Now 
+
+$w(\alpha)=w(\gamma)+w(\epsilon)=w(\gamma)+d$.
+
+Hence
+
+$w(\alpha)\geqq2t+1$ if $d>2t$.
+
+Suppose $d\leqq 2t$. If $w)\alpha)<2t+1$, then $w(\gamma)\leq2t-d$. Let $w(\gamma)=c$. There are exactly $c$ positions in $\gamma$ which are occupied by unity. Corresponding to each sych position we can find a row vector of $I_r$ which has unity is this (and zero in all other positions). Then these $c$ vectors of $I_r$, together eith the $d$ row vectors of $C$ whose sum is $\gamma$, constitute a set of $c+d$ vectors which are dependent. Since $c+d\leqq 2t$, this contradicts the fact that $A*$ has property $(P_{2t})$. Thus the weight of any nonnull element of $G$ is greater than or equal to $2t+1$. It follows from Lemma 1 that the sequnces of the subgroup generated by the $k$ rows of $C*$ form the alphabet of a $t$-error correcting $(n,k)$ group code.
+
+Proof of Necessity. Suppose there exists a $t$-error correcting $(n,k)$ binary group code. We can then find a set of $k$ $n$-place binary sequnces, or $n$-vectors with elements  from $GF(2)$, which under addition generate the group of sequnces which constitute the letters of the aplhabet. By Lemma 1 if $\alpha$ is a sequnce of this froup $w(\alpha)\geq 2t+1$. Consider the $k\times n$ matrix $C*$ whose row vectors are given by these sequnces. If we interchange any two rows or columns of $C*$, or replace the $i$th row of $C*$ by the sum of the $i$th and $j$th row $(i\neq j)$. the transformed matrix still retains the property that its rows generate under addition a group, each sequnce of which has weight $2t+1$ or more. Hence we can without loss of generality take $C*$ in the canonical form (4) where $C$ is of order $r\times k$ and $I_k$ is the unit matrix of order $k$. By retracing the arguments ised in proving the first part of the theorem, we see that the matrix $A*$ of order $n\times r$, given by (1), has the property that any two $2t$ row vectors are independent. This proves that the condition of the theorem is necessary.
+
+Corollary 1. The existence of a $t$-error correcting $(n,k)$ binary group code implies the existence of a $t$-error correcting $(n-c,k-c)$ binary group code, $-<c<k$.
+
+If in the matrix $C*$ given by (4) we deletet the last $c$ rows and the last $c$ columns, we get a matrix
+
+MATRIX2
+
+of order $(k-c)\times (n-k)$, the rows of which generate a group for which each nonnull element is of weight $2t+1$ or more. The rows of $C_1*$generate the alphabet of the required code.
+
+Let $V_r$ denote the vector space of all $r$-vectors whose elements belong to $GF(2)$. One may then ask the following question, What is the maximum number of vectors in a set $\Sigma$ chosen from $V_r$, such that any $2t$ distinct vectors from $\Sigma$ are independent. This number may be denoted $n_{2t}(r)$, and the problem of finding the set $\Sigma$ may be called the packing problem (of order $2t$) for $V_r$. For a given $t$, $n_{2t}(r)$ is a monotonically increaseing function of $r$.
+
+Let $k=k_1(n)$ denote the maximum value of $k$ such that a $t$-error correcting $(n,k)$ binary group code for a given $t$ and $n$ exists. We can then state the following.
+
+Theorem 2. If $n_{2t}(r)\geq n>n_{2t}(r-1)$, then $k_t(n)=n-r$.
+
+From Theorem 1 there exists a $t$-error correcting $[n_{2t}(r),n_{2t}(r)-r]$ binary group code. Taking $c=n_{2t}(r)-n$ in Corollary 1, there exists a $t$-error correcting $(n,n-r)$ group code. But a $t$-error correcting $(n,n-r+1)$ binary group code cannot exist, since from Theorem 1 its existence would imply that $n_{2t}(r-1)\geq n$. Hence $k_t(n)=n-r$ is the maximum value of $k$ for which a $t$-error coorecting $(n,k)$ binary group code exists.
+
+Thus the problem of finding a $t$-error correcting $n$-place binary group code, with the maximum transmission rate $k/n$, is equivalent to determining the smallest $r$ for which there exists a set of $n$ or more distinct cevtors of $V_r$, such that any $2t$ distinct vectors from the set are independent.
+
+SECTIN 3
+
+The theorem to be proved in th next section depends upon the following lemma.
+
+Lemma 2. If $x_1,x_2,\cdots,x_i$ are different nonzero elements of the Galois field $GF(2^m)$, then the equations
+
+$0$
+
+
+
+\end{document}
