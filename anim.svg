@@ -1,0 +1,473 @@
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="640" height="480" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" onload="init(evt)" onkeypress="keypress(event)">
+<script><![CDATA[
+// Точки
+var P1, P2, temP1, temP2, centerP, radP, crossingP;
+
+var debugState = false;
+var speed = 1;
+
+function $(id)
+{
+	target = svgDocument.getElementById(id);
+	target.attr = attr;
+	target.id = id;
+	return target;
+}
+
+function attr(att, val)
+{
+	// 1 параметр - отримати атрибут, 2 - встановити
+	if (val === undefined)
+	{
+		return $(this.id).getAttribute(att);
+	}
+	return $(this.id).setAttribute(att, val);
+}
+
+function Point(id, color)
+{
+	this.id = id;
+	this.color = color === undefined ?
+		$(id).attr("fill")
+		: color;
+	this.show = show;
+	this.hide = hide;
+	this.update = update;
+	this.setPos = setPos;
+	this.getX = function() { return parseInt($(this.id).attr("cx"), 10); }
+	this.getY = function() { return parseInt($(this.id).attr("cy"), 10); }
+	this.hide();
+}
+
+function setPos(x, y)
+{
+	$(this.id).attr("cx", x);
+	$(this.id).attr("cy", y);
+}
+
+function show()
+{
+	$(this.id).attr("fill", this.color);
+}
+
+function hide()
+{
+	$(this.id).attr("fill", "none");
+}
+
+function update()
+{
+	this.hide();
+	this.show();
+}
+
+
+
+
+var state = 0;
+var state_time = 0;
+var last_state = -1;
+
+
+function keypress(evt)
+{
+	if (evt.type == "keypress")
+	{
+		var charCode = evt.charCode ? evt.charCode : evt.keyCode;
+		if(charCode == 32) // space is pressed
+		{
+			state += 1;
+			window.setTimeout("animate()",20)
+		}
+	}
+}
+
+function init(evt)
+{
+	var O = evt.target;
+	svgDocument = O.ownerDocument;
+	svgDocument.addEventListener("keypress",keypress,false);
+	
+	initEverything();
+	
+	window.setTimeout("animate()", 20);
+}
+
+function initEverything()
+{
+	P1 = new Point("P1");
+	P2 = new Point("P2");
+	temP1 = new Point("temP1");
+	temP2 = new Point("temP2");
+	centerP = new Point("centerP");
+	radP = new Point("radP");
+	crossingP = new Point("crossingP");
+}
+
+function preProcessState()
+{
+	if (state != last_state)
+	{
+		state_time = 0;
+		last_state = state;
+	}
+}
+
+function setText(newText)
+{
+	$("svgText").textContent = newText;
+}
+
+function animate()
+{
+	timeOut = 20;
+	preProcessState();
+	switch (state)
+	{
+		case 0:
+			state0Handler();
+			break;
+		case 1:
+			state1Handler();
+			break;
+		case 2:
+			state2Handler();
+			break;
+		case 3:
+			state3Handler();
+			break;
+		default:
+			return;
+			break;
+	}
+	
+	state_time += timeOut;
+	window.setTimeout("animate()", timeOut);
+}
+
+function state0Handler()
+{
+	if (debugState)
+	{
+		anim_start = 10;
+		anim_finish = 20;
+	}
+	else
+	{
+		anim_start = 1000 * speed;
+		anim_finish = 2000 * speed;
+	}
+	
+	// фаза ініціалізації
+	if (state_time == 0)
+	{
+		P1.setPos(200, 200);
+		P2.setPos(340, 240);
+		P1.show();
+		P2.show();
+		setText("Take 2 points");
+		line = $("base");
+		line.attr("x1", P1.getX());
+		line.attr("x2", P2.getX());
+		line.attr("y1", P1.getY());
+		line.attr("y2", P2.getY());
+		line.attr("opacity", 0);
+		line.attr("stroke", "black");
+		return;
+	}
+	
+	// Фаза очікування
+	if (state_time < anim_start)
+	{
+		return;
+	}
+
+	// Фаза насичення
+	if (state_time > anim_finish)
+	{
+		return;
+	}
+
+	// фаза анімації
+	line = $("base");
+	line.attr("opacity", (state_time - anim_start) / (anim_finish - anim_start));
+	if (debugState)
+	{
+		state += 1;
+	}
+}
+
+function sqr(x)
+{
+	return x*x;
+}
+
+function distance(point1, point2)
+{
+	return Math.sqrt(sqr(point1.getX() - point2.getX()) + sqr(point1.getY() - point2.getY()));
+}
+
+function rotatePoint(x, y, x0, y0, phi)
+{
+	newX = x0 + (x - x0) * Math.cos(phi) - (y - y0) * Math.sin(phi);
+	newY = y0 + (x - x0) * Math.sin(phi) + (y - y0) * Math.cos(phi);
+	return {x: newX, y: newY};
+}
+
+function expandLine(point1, point2, howmuch)
+{
+	if (point2.x - point1.x == 0)
+	{
+		newP1 = {x: point1.x, y: point1.y - howmuch};
+		newP2 = {x: point2.x, y: point2.y + howmuch};
+		return {x1: newP1.x, y1: newP1.y, x2: newP2.x, y2: newP2.y};
+	}
+
+	k = (point2.y - point1.y) / (point2.x - point1.x);
+	newP1 = {x: point1.x + howmuch, y: point1.y + howmuch * k};
+	newP2 = {x: point2.x - howmuch, y: point2.y - howmuch * k};
+	return {x1: newP1.x, y1: newP1.y, x2: newP2.x, y2: newP2.y};
+}
+
+function state1Handler()
+{
+	arcPhi = 1.2;
+
+	// Фаза ініціалізації
+	anim_start = 500 * speed;
+	// Фаза анімації першої дуги
+	anim_arc1 = anim_start + 1000 * speed;
+	// Фаза анімації другої дуги
+	anim_arc2 = anim_arc1 + 1000 * speed;
+	// Фаза анімації перпендикуляру
+	anim_line = anim_arc2 + 1000 * speed;
+	// Фаза очищення лишнього 
+	anim_clear = anim_line + 1000 * speed;
+	
+	anim_finish = anim_clear + 500 * speed;
+	
+	// фаза ініціалізації
+	if (state_time == 0)
+	{
+		setText("Find center perpendicular");
+		line = $("base");
+		line.attr("opacity", 1);
+		centerP.setPos(P1.getX() + (P2.getX()-P1.getX())/2.0, P1.getY() + (P2.getY()-P1.getY())/2.0);
+		centerP.show();
+		$("centerP").attr("opacity", 0);
+		return;
+	}
+	
+	// Фаза очікування
+	if (state_time < anim_start)
+	{
+		return;
+	}
+
+	// Фаза ініціалізації першої дуги
+	if (state_time < anim_start + timeOut*2)
+	{
+		arc1 = $("tempArc1");
+		arc1.attr("stroke", "grey");
+		arc1.attr("d", "M 0 0 a 0 0  0 0 0  0 0");
+		return;
+	}
+
+	// Фаза анімації першої дуги
+	if (state_time < anim_arc1)
+	{
+		phi = (state_time - anim_arc1) / (500 * speed);
+		arcRad = distance(P1, P2);
+		arcStart = rotatePoint(P1.getX(), P1.getY(), P2.getX(), P2.getY(),- arcPhi);
+		arcEnd   = rotatePoint(P1.getX(), P1.getY(), P2.getX(), P2.getY(), arcPhi + phi);
+		arc1.attr("d", "M " + arcStart.x + " " + arcStart.y + " A " + arcRad + " " + arcRad + " 0 0 1 "
+							+ arcEnd.x + " " + arcEnd.y);
+		return;
+	}
+
+	// Фаза ініціалізації другої дуги
+	if (state_time < anim_arc1 + timeOut*2)
+	{
+		arc2 = $("tempArc2");
+		arc2.attr("stroke", "grey");
+		arc2.attr("d", "M 0 0 a 0 0  0 0 0  0 0");
+		return;
+	}
+
+	// Фаза анімації другої дуги
+	if (state_time < anim_arc2)
+	{
+		phi = (state_time - anim_arc2) / (500 * speed);
+		arcRad = distance(P1, P2);
+		arcStart = rotatePoint(P2.getX(), P2.getY(), P1.getX(), P1.getY(),arcPhi);
+		arcEnd   = rotatePoint(P2.getX(), P2.getY(), P1.getX(), P1.getY(), -arcPhi - phi);
+		arc2.attr("d", "M " + arcStart.x + " " + arcStart.y + " A " + arcRad + " " + arcRad + " 0 0 0 "
+							+ arcEnd.x + " " + arcEnd.y);
+		return;
+	}
+
+	// Фаза ініціалізації перпендикуляру
+	if (state_time < anim_arc2 + timeOut*2)
+	{
+		arcCross1 = rotatePoint(P2.getX(), P2.getY(), P1.getX(), P1.getY(), -1.04);
+		arcCross2 = rotatePoint(P2.getX(), P2.getY(), P1.getX(), P1.getY(),  1.04);
+		temP1.setPos(arcCross1.x, arcCross1.y);
+		temP2.setPos(arcCross2.x, arcCross2.y);
+		temP1.show();
+		temP2.show();
+		
+		lineCoords = expandLine(arcCross1, arcCross2, 200);
+		line = $("orto");
+		line.attr("x1", lineCoords.x1);
+		line.attr("x2", lineCoords.x2);
+		line.attr("y1", lineCoords.y1);
+		line.attr("y2", lineCoords.y2);
+		line.attr("opacity", 0);
+		line.attr("stroke", "red");
+		return;
+	}
+
+	// Фаза анімації перпендикуляру
+	if (state_time < anim_line)
+	{
+		line = $("orto");
+		line.attr("opacity", 1 - (anim_line - state_time) / (anim_line - anim_arc2));
+		return;
+	}
+
+	// Фаза очищення
+	if (state_time < anim_clear)
+	{
+		opa = (anim_clear - state_time) / (anim_clear - anim_line);
+		$("tempArc1").attr("opacity", opa);
+		$("tempArc2").attr("opacity", opa);
+		$("temP1").attr("opacity", opa);
+		$("temP2").attr("opacity", opa);
+		$("centerP").attr("opacity", 1 - opa);
+		return;
+	}
+
+	// Фаза насичення
+	if (state_time > anim_finish)
+	{
+		if (debugState)
+		{
+			state += 1;
+		}
+		return;
+	}
+
+	// фаза анімації
+}
+
+function state2Handler()
+{
+	// Фаза ініціалізації
+	anim_start = 3000 * speed;
+	// Фаза анімації руху радіусу і дуги
+	anim_rad = anim_start + 2000 * speed;
+	
+	anim_finish = anim_rad + 500 * speed;
+	
+	// фаза ініціалізації
+	if (state_time == 0)
+	{
+		setText("Then take the radius ...");
+		line = $("rad");
+		line.attr("opacity", 1);
+		line.attr("stroke", "blue");
+		line.attr("x1", P1.getX());
+		line.attr("y1", P1.getY());
+		line.attr("x2", P1.getX());
+		line.attr("y2", P1.getY() - distance(P1,P2)*0.7);
+		return;
+	}
+
+	// Фаза початку
+	if (state_time < anim_start)
+	{
+		line = $("rad");
+		line.attr("opacity", Math.sin(state_time));
+		return;
+	}
+
+	if (state_time < anim_start + timeOut*2)
+	{
+		radArc = $("radArc");
+		radArc.attr("stroke", "blue");
+		radArc.attr("d", "M 0 0 a 0 0  0 0 0  0 0");
+	}
+	
+	// Фаза обертання
+	if (state_time < anim_rad)
+	{
+		varP = rotatePoint($("rad").attr("x2"), $("rad").attr("y2"), P1.getX(), P1.getY(), 0.3/speed*0.07);
+		$("rad").attr("x2", varP.x);
+		$("rad").attr("y2", varP.y);
+		
+		phi = (state_time - anim_arc2) / (500 * speed);
+		arcRad = Math.sqrt(sqr(P1.getX() - varP.x) + sqr(P1.getY() - varP.y));
+		radArc.attr("d", "M " + P1.getX() + " " + (P1.getY() - distance(P1,P2)*0.7)
+			+ " A " + arcRad + " " + arcRad + " 0 0 1 "
+			+ varP.x + " " + varP.y);
+
+		return;
+	}
+	
+	if (state_time > anim_finish)
+	{
+		setText("... and find crossing point!");
+		$("rad").attr("stroke", "none");
+		radP.setPos($("rad").attr("x2"), $("rad").attr("y2"));
+		diff = getKatet(distance(radP, P1), distance(P1, centerP));
+		rotated = rotatePoint(P1.getX(), P1.getY(), centerP.getX(), centerP.getY(), 1.59);
+		
+		pp1 = {x: centerP.getX(), y: centerP.getY()};
+		expa = expandLine(pp1, rotated, - (diff - distance(P1, centerP))*0.5);
+		crossingP.setPos(expa.x2, expa.y2);
+		crossingP.show();
+		return;
+	}
+}
+
+function getKatet(gipo, katet)
+{
+	return Math.sqrt(sqr(gipo) - sqr(katet));
+}
+
+function state3Handler()
+{
+	setText("Now you have center and radius!");
+	$("el").attr("rx", distance(P1,P2)*0.7);
+	$("el").attr("ry", distance(P1,P2)*0.7);
+	$("el").attr("cx", crossingP.getX());
+	$("el").attr("cy", crossingP.getY());
+	$("el").attr("stroke", "blue");
+	state += 1;
+}
+//]]>
+</script>
+<line id="base" stroke="none" stroke-width="2" />
+<line id="orto" stroke="none" stroke-width="1" />
+<line id="rad"  stroke="none" stroke-width="2" />
+
+<ellipse id="P1"        rx="3" ry="3" stroke="none" fill="red" />
+<ellipse id="P2"        rx="3" ry="3" stroke="none" fill="red" />
+<ellipse id="temP1"     rx="3" ry="3" stroke="none" fill="grey" />
+<ellipse id="temP2"     rx="3" ry="3" stroke="none" fill="grey" />
+<ellipse id="centerP"   rx="3" ry="3" stroke="none" fill="red" />
+<ellipse id="radP"      rx="3" ry="3" stroke="none" fill="red" />
+<ellipse id="crossingP" rx="3" ry="3" stroke="none" fill="blue" />
+
+<path id="tempArc1" d = "M 50 50 a 50 50 0 0 0 200 200" fill="none" stroke="none" />
+<path id="tempArc2" d = "M 50 50 a 50 50 0 0 0 200 200" fill="none" stroke="none" />
+<path id="radArc" d = "M 50 50 a 50 50 0 0 0 200 200" fill="none" stroke="none" />
+
+<text x="11" y="35" id="svgText" fill="#000000" stroke="#000000" 
+stroke-width="0" text-anchor="left" font-family="serif" 
+xml:space="preserve" font-size="24">Press space to pause/resume animation.</text>
+
+<ellipse id="el" cx="0" cy="0" rx="0" ry="0" fill="none" stroke="black" stroke-width="2" />
+
+</svg>
