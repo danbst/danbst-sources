@@ -1,0 +1,5345 @@
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass eskdtextnew
+\begin_preamble
+\righthyphenmin=2
+\usepackage[utf8]{inputenc}
+\renewcommand{\ESKDtitle}{Розробка мультизадачного Forth-ядра для мікроконтролерів AVR}
+\ESKDsignature{ІА72.050БАК.009.ПЗ}
+\ESKDcolumnI{\ESKDtitle}
+\ESKDauthor{Глинський Д.}
+\ESKDtitleApprovedBy{Старший викладач}{Глушко Є. В.}
+\ESKDtitleDesignedBy{Студент}{Глинський Данило Євгенович}
+\ESKDdate{2011/06/8}
+
+\ESKDcolumnXIfI{Глинський Д.}
+\ESKDcolumnXIfII{Глушко Є.}
+\renewcommand{\ESKDcolumnVIIname}{%
+  \ESKDfontIIsize{\cyr\CYRA\cyrr\cyrk\cyru\cyrsh}}
+
+\newcommand{\KPISTDtitleYear}{2011}
+
+\newcommand{\blabla}[2]{%
+\parbox[t]{.4\hsize}{\raggedright#1}
+\hfill
+\parbox[t]{.4\hsize}{\raggedright#2}} 
+
+\newcommand{\KPISTDallowedName}{Теленик~С.Ф.}
+\newcommand{\KPISTDworkName}{Проектування мультизадачного Форт-ядра для мікроконтролерів AVR}
+
+\newcommand{\KPISTDdepartment}{Міністерство освіти і науки України}
+\newcommand{\KPISTDcompany}{Національний технічний університет України \par 							<<Київський політехнічний інститут>>}
+\newcommand{\KPISTDfaculty}{Факультет інформатики та обчислювальної техніки}
+\newcommand{\KPISTDcathedra}{Кафедра автоматики та управління в технічних системах}
+\newcommand{\KPISTDtitleFontI}{\fontsize{8pt}{10pt}}
+\newcommand{\KPISTDtitleFontV}{\ESKDfontV\upshape\bfseries}
+
+\newcommand{\studentGroup}{IA-72}
+\newcommand{\studentFullName}{Глинський Данило Євгенович}
+\newcommand{\kurator}{ст. викладач Глушко Є. В.}
+
+
+\newcommand{\rulerText}[2]{
+\parbox[t]{#1}{\raggedright \centering#2\strut\vspace{-0.2em}\hrule}
+}
+
+\newcommand{\KPISTDtitleStudent}{
+\parbox[t]{.25\hsize}{\raggedright\textbf{\ESKDfontV\upshape Студент групи}}
+\rulerText{.1\hsize}{\studentGroup}
+\rulerText{.45\hsize}{\studentFullName}
+\hfill\rulerText{.1\hsize}{\ }
+}
+
+\newcommand{\KPISTDtitleKurator}{
+\parbox[t]{.3\hsize}{\raggedright\textbf{\ESKDfontV\upshape Керівник роботи}}
+\rulerText{.50\hsize}{\kurator}
+\hfill\rulerText{.1\hsize}{\ }
+}
+
+\newcommand{\maketitleKPI}{%
+\begin{ESKDtitlePage}
+\setlength{\topsep}{0mm}
+\noindent
+\parbox[c][.28\vsize][t]{\hsize}{%
+\begin{center}\KPISTDtitleFontV\bfseries\KPISTDdepartment\par\KPISTDcompany\end{center}
+\vspace{5mm}
+\begin{center}\KPISTDtitleFontI\KPISTDfaculty\end{center}     
+\begin{center}\KPISTDtitleFontI\KPISTDcathedra\end{center}     
+\vspace{10mm}
+\blabla{\ }{\ESKDtitleMakeStamp{До захисту допущено\par
+\textbf{Завідувач кафедри}}
+{\MakeUppercase{\KPISTDallowedName}}}
+}
+\par\vspace{30mm}\noindent
+\parbox[c][.30\vsize][t]{\hsize}{% 
+\begin{center}\KPISTDtitleFontV\bfseries Пояснювальна записка \end{center}
+\vspace{5mm}
+\begin{center}\KPISTDtitleFontI до дипломної роботи освітньо-квалфікаційного рівня <<бакалавр>>\par з напрямку підготовки \end{center}     
+\begin{center}\KPISTDtitleFontI 6.050201 <<Системна інженерія>> \end{center}     
+\vspace{10mm}
+\begin{flushleft}\KPISTDtitleFontI на тему: \rulerText{.8\hsize}{\raggedright\ESKDtitleFontI\ESKDtitle\vspace{-1em}\hrule}\hfill \end{flushleft}
+\vspace{20mm}
+\KPISTDtitleStudent
+\par\vspace{5mm}
+\KPISTDtitleKurator
+}
+\vfill
+\begin{center}\ESKDtitleFontX Київ --- \KPISTDtitleYear\end{center} 
+\vspace{20mm}
+\end{ESKDtitlePage}}
+
+\usepackage{color}
+\usepackage{listings}
+\lstloadlanguages{Python}
+\lstset{ %
+  language=Python,
+  xleftmargin=0.1\hsize,
+  stringstyle=\ttfamily\small,
+  basicstyle=\ttfamily\small,
+  showstringspaces=false,
+  numbers=left,
+  keywordstyle=\color{black}\bfseries,
+  tabsize=2,
+  extendedchars=false,
+  inputencoding=utf8,
+  columns=fixed,
+  breaklines=true,
+  keepspaces=true,
+  showspaces=false}
+
+\usepackage[absolute]{textpos}
+\usepackage{graphicx}
+
+\renewcommand{\ESKDsectionStyle}{\normalfont\Large\MakeUppercase}
+\renewcommand{\ESKDsubsectionStyle}{\normalfont\large}
+\setlength{\ESKDsubsectionSkipAfter}{5mm}
+\end_preamble
+\options ukrainian, utf8, stitching, 14pt,  floatsection, pointsection
+\use_default_options true
+\language ukrainian
+\inputencoding utf8
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics pdftex
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language french
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+maketitleKPI
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+newpage
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+tableofcontents
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+newpage
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Вступ
+\end_layout
+
+\begin_layout Standard
+Написання програм під 8-бітні мікроконтролери є важливою навичкою для спеціаліст
+а по автоматизації.
+ Разом з тим, іноді важливішими постають задачі прототипування програми
+ у певному зручному середовищі, наприклад, при навчанні, освоєнні нової
+ технології, експериментальних запусках.
+ Важливо, щоб таке середовище було інтерактивним, що сприяє зменшенню часу
+ відлагоджувального процесу.
+ В якості одного такого середовища може виступати ядро на основі Форта.
+\end_layout
+
+\begin_layout Standard
+Форт складається з двух основних частин: адресний інтепретатор і Форт-інтепретат
+ор.
+ Перший грає роль віртуальної машини і довзоляє виконувати 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+ди
+\backslash
+-наміч
+\backslash
+-но-змінний
+\end_layout
+
+\end_inset
+
+ код навіть на процесорах з гарвардською архітектурою пам’яті.
+ Другий довзоляє динамічно виконувати (або компілювати у зрозумілий для
+ адресного інтепретатора) код, записаний за допомогою ASCII символів.
+ За рахунок даних особливостей Форт може використовуватись як середовище
+ швидкого прототипування для мікроконтролерів.
+\end_layout
+
+\begin_layout Standard
+Окрім того, Форт являє собою цінність у наш час через наявність на ринку
+ апаратних форт-процесорів GreenArrays, з нуль-операндним Форт-асемблером
+ і великою кількістю ядер (до 144) з високою продуктивністю.
+ Даний процесор може скласти хорошу конкуренію існуючим на ринку цифрової
+ обробки сигналів, і якщо це станеться, то уміння програмувати на Форті
+ стане потрібним.
+\end_layout
+
+\begin_layout Standard
+Окремо, проте в рамках даної роботи, розглянуто техніку модифікації програмного
+ середовища під проект, а саме розширення макроасемблера скриптовим макропрепроц
+есором з оригінальним синтаксисом.
+ Дана технологія відноситься до метапрограмного підходу в програмуванні
+ і розширює звичайний асемблер кодогенеративними можливостями.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+newpage
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Раздел
+Аналіз існуючих засобів
+\end_layout
+
+\begin_layout Standard
+Освоєння нової технології завжди супроводжується проблемами.
+ Основними є:
+\end_layout
+
+\begin_layout Itemize
+відсутність важливих наукових доробок
+\end_layout
+
+\begin_layout Itemize
+недостатньо організована документація
+\end_layout
+
+\begin_layout Itemize
+присутність недоліків реалізації технології
+\end_layout
+
+\begin_layout Itemize
+дуже похила крива навчання
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+У випадку використання мікроконтролерів для знайомства із особливостями
+ організації мікропроцесорних обчислень можна зіткнутись з кожною з вищеназваних
+ проблем.
+ Саме тому потреби спеціалістів по комп’ютерним технологіям є повищеними
+ у сучасному світі.
+\end_layout
+
+\begin_layout Standard
+Дана ситуація, хоч і вставновлена у світі, проте не є особливо привабливою
+ для роботодавців.
+ Останнім потрібно, щоб технологія була якомога простіша у освоєнні і якомога
+ зручніша для підтримки, за рахунок чого можна знизити мінімальний рівень
+ володіння технологією спеціаліста і здешевити процес.
+ З даної точки зору, будь-який процес, направлений у сторону спрощення технологі
+ї або спрощення її сприйняття, є вигідним для замовника і/або роботодавця.
+ 
+\end_layout
+
+\begin_layout Standard
+Одним з способів спрощення освоєння нової технології є використання проміжних
+ шарів.
+ Важливими складовими проміжного шару є:
+\end_layout
+
+\begin_layout Itemize
+простіший підхід до технології, абстрагування від складних для розуміння
+ особливостей
+\end_layout
+
+\begin_layout Itemize
+зручніший інтерфейс з людиною
+\end_layout
+
+\begin_layout Itemize
+хороша документація
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Наприклад, даним умовам відповідає мова програмування С, інтегрована система
+ розробки AVR Studio, певний набір сайтів з інтернету, набір типових алгоритмів.
+ Іншими прикладами є відлагоджувальний стенд, операційна система для мікроконтро
+лера, система з термінальним доступом до мікроконтролера, командний рядок
+ для управління.
+\end_layout
+
+\begin_layout Standard
+Приклад із навчальним стендом варто розглянути окремо.
+ Стенд містить у собі певну кількість електронних компонент і приховує від
+ користувача складні моменти проектування зв’язків між цими компонентами,
+ фактично звільнює програміста від непрограмних задач.
+ 
+\end_layout
+
+\begin_layout Standard
+Додатковим способом спрощення взаємодії між електронікою і людиною — це
+ абстрагування від апаратного рівня.
+ Для цього зручно використовувати програмні середовища, такі як операційні
+ системи або Форт системи.
+ Опишемо їх більш конкретно.
+\end_layout
+
+\begin_layout Подраздел
+Операційні системи
+\end_layout
+
+\begin_layout Standard
+Мікроконтролери AVR є одними з найпопулярніших на ринку.
+ Завдяки цьому було породжено велика кількість операційних систем.
+ Рогзлянемо тільки найпростіші, операційні системи для 8 і 16 бітних мікроконтро
+лерів.
+\end_layout
+
+\begin_layout Itemize
+Мультизадачна система реального часу CMX
+\end_layout
+
+\begin_layout Itemize
+Femto OS
+\end_layout
+
+\begin_layout Itemize
+AVRILOS
+\end_layout
+
+\begin_layout Itemize
+FreeRTOS
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Усі вищеназвані операційні системи працюють по одному принципу, показаному
+ на Рисунку 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "f:rtos-all"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}
+\backslash
+includegraphics[width=0.7
+\backslash
+paperwidth]{rtos-all.png}
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Архітектура багаторівневої багатозадачності
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "f:rtos-all"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+У деяких з них реалізовано термінал, проте можливості виконати будь-який
+ код віддалено — немає.
+\end_layout
+
+\begin_layout Подраздел
+Форт і його реалізації
+\end_layout
+
+\begin_layout Standard
+Форт (англ.
+ Forth) — це мова і середовище програмування.
+ Він вважається найпростішою мовою для реалізації на асемблері
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+при використанні метрики 
+\begin_inset Quotes fld
+\end_inset
+
+розмір коду
+\begin_inset Quotes frd
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ і при цьому являється мовою високого рівня.
+ В своєму стандартному вигляді він забезпечує:
+\end_layout
+
+\begin_layout Itemize
+компіляцію і виконання скомпільованих програм
+\end_layout
+
+\begin_layout Itemize
+інтерпретацію текстової програми
+\end_layout
+
+\begin_layout Itemize
+підтримку базових пристроїв вводу/виводу (термінал)
+\end_layout
+
+\begin_layout Itemize
+кооперативну багатозадачність
+\end_layout
+
+\begin_layout Itemize
+невеликі потреби у ресурсах для функціювання
+\end_layout
+
+\begin_layout Itemize
+гнучкість і розширюваність, створення специфічних до задачі мов (DSL)
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Найвідомішою існуючою реалізацією Форта для AVR мікроконтролерів є проект
+ AMforth.
+ Іншою відомою реалізацією Форта для AVR є avrforth.
+ Обидві ці реалізації використовують прямий шитий код і перезаписують пам’ять
+ ПЗП мікроконтролера.
+\end_layout
+
+\begin_layout Подраздел
+Мікроконтролери AVR
+\end_layout
+
+\begin_layout Standard
+AVR являє собою 8-розрядний RISC мікроконтролер, що має швидке процесорне
+ ядро, Flash-пам'ять програм, пам'ять даних SRAM, порти введення/виведення
+ і інтерфейсні схеми.
+ Гарвардська архітектура AVR реалізує повний логічний і фізичний поділ не
+ тільки адресних просторів, але й інформаційних шин для звертання до ROM
+ і SRAM.
+ Така побудова вже ближче до структури цифрових сигнальних процесорів і
+ забезпечує істотне підвищення продуктивності (див.
+ Рисунок 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "f:avr-arch"
+
+\end_inset
+
+).
+ Використання однорівневого конвеєра в AVR також помітно скоротило цикл
+ 
+\begin_inset Quotes fld
+\end_inset
+
+вибірка - виконання
+\begin_inset Quotes frd
+\end_inset
+
+ команди.
+ Наприклад, у стандартних мікроконтролерів сім‘ї MCS-51 коротка команда
+ виконується за 12 тактів генератора (1 машинний цикл), протягом якого процесор
+ послідовно зчитує код операції і виконує її.
+ У мікроконтролерах AVR коротка команда в загальному потоці теж виконується
+ за один машинний цикл, але він складає всього один період тактової частоти.
+ Відмінною рисою архітектури AVR є регістровий файл швидкого доступу, що
+ містить 32 байтових регістра загального призначення.
+ Шість регістрів файлу можуть використовуватися як три 16-розрядних покажчика
+ адреси при непрямій адресації даних (X, Y і Z Pointers), що істотно підвищує
+ швидкість пересилання даних при роботі прикладної програми.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}
+\backslash
+includegraphics[width=0.7
+\backslash
+paperwidth]{avr-arch.png}
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Архітектура мікроконтролерів AVR
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "f:avr-arch"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Flash-пам'ять програм AVR може бути завантажена як за допомогою звичайного
+ програматора, так і за допомогою SPI-інтерфейсу, у тому числі безпосередньо
+ на робочій платі - функція ISP.
+ Останні версії кристалів "mega" випуску 2001-2002 року мають можливість
+ самопрограмування (функція SPM).
+ Усі AVR мають також блок енергонезалежної пам'яті даних EEPROM, доступний
+ програмі мікроконтролера безпосередньо в ході її виконання.
+ EEPROM звичайно використовується для збереження проміжних даних, констант,
+ таблиць перекодувань, каліброваних коефіцієнтів і т.п.
+ Ця пам'ять може бути завантажена ззовні як через SPI інтерфейс, так і за
+ допомогою звичайного програматора.
+ Два програмованих біти таємності дозволяють захистити ROM і енергонезалежну
+ пам'ять даних EEPROM від несанкціонованого доступу.
+ Внутрішня оперативна пам'ять SRAM є в AVR сім’ях "classic" і "mega", а
+ також в одного представника "tiny" - ATtiny26/L.
+ Для деяких мікроконтролерів можлива організація підключення зовнішньої
+ пам'яті даних об‘ємом до 64К (див.
+ Рисунок 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "f:avr-mem"
+
+\end_inset
+
+).
+ 
+\end_layout
+
+\begin_layout Standard
+Внутрішній тактовий генератор AVR може запускатися від зовнішнього генератора
+ або кварцового резонатора, а також від внутрішнього або зовнішнього RC-ланцюга.
+ Усі AVR цілком статичні, їх мінімальна робоча частота нічим не обмежена
+ (аж до покрокового режиму).
+ Мікроконтролер ATtiny15L має додатковий блок PLL для апаратного збільшення
+ основної тактової частоти в 16 разів.
+ При її номінальному значенні 1,6 Мгц одержувана допоміжна периферійна частота
+ дорівнює 25,6 Мгц.
+ Ця частота може служити джерелом для одного з таймерів/лічильників мікроконтрол
+ера, значно підвищуючи точність його роботи.
+ Мікроконтролери ATmega64/103/128 також мають цікаву архітектурну особливість,
+ що дозволяє значно знизити енергоспоживання кристала в цілому, коли в процесі
+ роботи доцільно понизити основну тактову частоту мікросхеми.
+ Спеціальний переддільник на кристалі дозволяє ділити основну частоту на
+ ціле число в діапазоні від 2 до 129.
+ Включення/виключення даної функції здійснюється програмно.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}
+\backslash
+includegraphics[height=0.3
+\backslash
+paperheight]{avr-mem.png}
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Організація пам’яті мікроконтролерів AVR
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "f:avr-mem"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Мікроконтролери AVR мають від 1 до 4 таймерів/лічильників загального призначення
+ з розрядністю 8 або 16 біт.
+ 
+\end_layout
+
+\begin_layout Standard
+Загальні риси всіх таймерів/лічильників наступні: 
+\end_layout
+
+\begin_layout Itemize
+наявність програмованого переддільника вхідної частоти з різними градаціями
+ ділення.
+ Відмінною рисою є можливість роботи таймерів/лічильників на основній тактовій
+ частоті мікроконтролера без попереднього її зниження, що помітно підвищує
+ точність генерації часових інтервалів системи; 
+\end_layout
+
+\begin_layout Itemize
+незалежне функціонування від режиму роботи процесорного ядра мікроконтролера
+ (тобто вони можуть бути як зчитані, так і завантажені новим значенням у
+ будь-який час); 
+\end_layout
+
+\begin_layout Itemize
+можливість роботи або від зовнішнього джерела опорної частоти, або як лічильник
+ зовнішніх подій.
+ Верхній частотний поріг визначений у цьому випадку як половина основної
+ тактової частоти мікроконтролера.
+ Вибір перепаду зовнішнього джерела (фронт або зріз) програмується користувачем;
+ 
+\end_layout
+
+\begin_layout Itemize
+наявність різних векторів переривань для подій "переповнення вмісту", "захопленн
+я", "порівняння".
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Вартовий таймер у AVR має свій власний RC-генератор з частотою 1 МГц, яка
+ є нестабільною і залежить від величини напруги живлення мікроконтролера
+ і від температури.
+ Вартовий таймер містить окремий програмований переддільник вхідної частоти,
+ що дозволяє підлаштовувати часовий інтервал переповнення таймера і скидання
+ мікроконтролера.
+ Даний таймер можна програмно відключати під час роботи мікросхеми, як в
+ активному режимі, так і в кожному з режимів зниженого енергоспоживання.
+ В останньому випадку це приводить до значного зниження споживаного струму.
+ 
+\end_layout
+
+\begin_layout Standard
+Система реального часу (RTC) реалізована у всіх мікроконтролерах "mega"
+ і в двох кристалах "classic" - AT90(L)S8535.
+ Таймер/лічильник RTC має окремий переддільник, що може бути програмним
+ способом підключений або до джерела основної тактової частоти, або до додатково
+го асинхронного джерела опорної частоти (кварцовий резонатор або зовнішній
+ синхросигнал).
+ Для цієї мети зарезервовані два виводи мікросхеми.
+ Внутрішній осцилятор, підключений до лічильного входу таймера/лічильника
+ RTC, який оптимізован для роботи з зовнішнім "годинним" кварцовим резонатором
+ 32,768 кГц.
+ 
+\end_layout
+
+\begin_layout Standard
+Порти введення/виведення AVR мають число незалежних ліній "Вхід/Вихід" від
+ 3 до 53.
+ Вихідні драйвери забезпечують струменеву навантажувальну здатність 20 мА
+ на лінію порту (вхідний струм) при максимальному значенні 40 мА, що дозволяє
+ безпосередньо підключати до мікроконтролера світлодіоди і біполярні транзистори.
+ Архітектура побудови портів введення/виведення AVR із трьома бітами контролю/уп
+равління (замість двох, як це зроблено в більшості 8-розрядних мікроконтролерів)
+ дозволяє розробнику цілком контролювати процес введення/виведення, усуває
+ необхідність мати копію вмісту порту в пам'яті для безпеки і підвищує швидкість
+ роботи мікроконтролера при роботі з зовнішніми пристроями.
+ Особливу значимість здобуває дана можливість AVR при реалізації систем,
+ що працюють в умовах зовнішніх електричних завад.
+ 
+\end_layout
+
+\begin_layout Standard
+Аналоговий компаратор входить до складу більшості AVR.
+ Він має окремий вектор переривання в загальній системі переривань мікроконтроле
+ра.
+ Тип перепаду, що викликає запит на переривання при спрацьовуванні компаратора,
+ може бути запрограмований як фронт, зріз або переключення.
+ Важливою апаратною особливістю є те, що логічний вихід компаратора може
+ бути програмним чином підключений до входу одного з 16-розрядних таймерів/лічил
+ьників, що працює в режимі захоплення.
+ Це дає можливість вимірювати тривалості аналогових сигналів, а також реалізовув
+ати АЦП двотактного інтегрування.
+ 
+\end_layout
+
+\begin_layout Standard
+Аналого-цифровий перетворювач побудований за схемою АЦП послідовного наближення
+ з пристроєм вибірки/зберігання.
+ Число незалежних каналів перетворення визначається типом мікро контролера.
+ Розрядність АЦП складає 10 біт.
+ Час перетворення вибирається програмно за допомогою установки коефіцієнта
+ дільника частоти, що входить до складу блоку АЦП.
+ Важливою особливістю аналого-цифрового перетворювача є функція придушення
+ шуму при перетворенні, коли на точність не впливають завади, що виникають
+ при роботі процесорного ядра.
+ 
+\end_layout
+
+\begin_layout Пункт1
+Відмінні риси
+\end_layout
+
+\begin_layout Standard
+Основні особливості мікроконтролерів, наприклад, сім‘ї Classic: 
+\end_layout
+
+\begin_layout Itemize
+можливість обчислень зі швидкістю до 1 MIPS/Мгц; FLASH-пам'ять програм об‘ємом
+ від 1 до 8 Кбайт (число циклів стирання/запису не менш 1000); 
+\end_layout
+
+\begin_layout Itemize
+пам'ять даних на основі статичного ОЗП (SRAM) об‘ємом до 512 байт; пам'ять
+ даних на основі ЕСППЗП (EEPROM) об‘ємом від 64 до 512 байт (число циклів
+ стирання/запису не менш 100000); можливість захисту від зчитування і модифікаці
+ї пам'яті програм і даних (EEPROM); 
+\end_layout
+
+\begin_layout Itemize
+програмування в паралельному (з використанням программатора) або в послідовному
+ (безпосередньо в системі через послідовний SPI-інтерфейс) режимах; 
+\end_layout
+
+\begin_layout Itemize
+різні способи синхронізації: вбудований RC-генератор, зовнішній сигнал синхроніз
+ації або зовнішній резонатор (п’єзокерамічний або кварцовий); 
+\end_layout
+
+\begin_layout Itemize
+наявність декількох режимів зниженого енергоспоживання.
+\end_layout
+
+\begin_layout Пункт1
+Характеристики ядра контролера 
+\end_layout
+
+\begin_layout Standard
+Основними характеристиками центрального процесора мікроконтролерів розглянутої
+ сім‘ї є: 
+\end_layout
+
+\begin_layout Itemize
+цілком статична архітектура, мінімальна тактова частота дорівнює нулеві;
+ 
+\end_layout
+
+\begin_layout Itemize
+АЛП підключений безпосередньо до регістрів загального призначення; 
+\end_layout
+
+\begin_layout Itemize
+більшість команд виконується за один машинний цикл;
+\end_layout
+
+\begin_layout Itemize
+багаторівнева система переривань, підтримка черги переривань; 
+\end_layout
+
+\begin_layout Itemize
+від 3 до 16 джерел переривань (з них до 2 зовнішніх);
+\end_layout
+
+\begin_layout Itemize
+наявність програмного стека.
+ 
+\end_layout
+
+\begin_layout Пункт1
+Периферійні пристрої 
+\end_layout
+
+\begin_layout Standard
+Мікроконтролери сім‘ї Classic мають досить розвинуту периферію.
+ Набір периферійних пристроїв, що входять до складу того або іншого мікроконтрол
+ера, залежить від конкретної моделі.
+ Перелічимо всі периферійні пристрої, які так чи інакше зустрічаються в
+ мікроконтролерах сім‘ї: 
+\end_layout
+
+\begin_layout Itemize
+8-розрядний таймер/лічильник із переддільником (таймер Т0); 
+\end_layout
+
+\begin_layout Itemize
+16-розрядний таймер/лічильник із переддільником (таймер Т1); 
+\end_layout
+
+\begin_layout Itemize
+8-розрядний таймер/лічильник з можливістю роботи в асинхронному режимі (таймер
+ Т2); 
+\end_layout
+
+\begin_layout Itemize
+вартовий таймер (WDT); 
+\end_layout
+
+\begin_layout Itemize
+одно- або двоканальний 8..10-розрядний генератор сигналу із широтно-імпульсною
+ модуляцією (ШІМ); 
+\end_layout
+
+\begin_layout Itemize
+одноканальний 8-розрядний генератор сигналу із ШІМ;
+\end_layout
+
+\begin_layout Itemize
+аналоговий компаратор; 
+\end_layout
+
+\begin_layout Itemize
+10-розрядний АЦП (6 або 8 каналів); 
+\end_layout
+
+\begin_layout Itemize
+універсальний асинхронний приймач-передавач (UART); див.
+ Рисунок 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "f:uart"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+послідовний синхронний інтерфейс SPI.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}
+\backslash
+includegraphics[height=0.3
+\backslash
+paperheight]{uart.png}
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Структура асинхронного передавача AVR
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "f:uart"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Пункт1
+Характеристики підсистеми введення/виведення 
+\end_layout
+
+\begin_layout Standard
+Основними характеристиками підсистеми введення/виведення є: 
+\end_layout
+
+\begin_layout Itemize
+програмне конфігурування і вибір портів введення/виведення;
+\end_layout
+
+\begin_layout Itemize
+кожен вивід може бути запрограмований як вхідний або як вихідний незалежно
+ від інших; 
+\end_layout
+
+\begin_layout Itemize
+вхідні буфери з тригером Шмітта на усіх виводах; 
+\end_layout
+
+\begin_layout Itemize
+можливість підключення до усіх входів внутрішніх резисторів, що підтягують,
+ (опір резисторів складає 35...
+ 120 кОм);
+\end_layout
+
+\begin_layout Itemize
+навантажувальна здатність усіх виводів складає до 20 мА, що дозволяє безпосередн
+ьо управляти світлодіодними індікаторами.
+ 
+\end_layout
+
+\begin_layout Подраздел
+Стенд EV8031/AVR 
+\end_layout
+
+\begin_layout Standard
+Навчально-налагаджувальний стенд 
+\begin_inset Quotes fld
+\end_inset
+
+EV8031/AVR
+\begin_inset Quotes frd
+\end_inset
+
+ (див.
+ структурну схему на Рисунку 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "f:ev8031-struct"
+
+\end_inset
+
+) — пограмно-апартний комплекс, орієнтований на використання в навчальних
+ цілях по курсам програмування (Асемблер, С), а також середовище розробки
+ програмного забезпечення на базі однокристальних контролерів архітектури
+ AVR.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}
+\backslash
+includegraphics[height=0.3
+\backslash
+paperheight]{ev8031-struct.png}
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Структура відлагоджувального стенду EV8031
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "f:ev8031-struct"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Зв’язок навчально-налагоджувального стенду 
+\begin_inset Quotes fld
+\end_inset
+
+EV8031/AVR
+\begin_inset Quotes frd
+\end_inset
+
+ відбувається через COM-порт.
+ В комплект зі стендом постачається універсальний з’єднуючий кабель з двума
+ гніздами (25 і 9 пінів) для з’єднання з одним з COM-портів.
+ 
+\end_layout
+
+\begin_layout Standard
+Програмування мікроконтролера AVR відбувається через послідовний порт.
+\end_layout
+
+\begin_layout Standard
+Технічні характеристики:
+\end_layout
+
+\begin_layout Itemize
+використовується процесор ATmega8515
+\end_layout
+
+\begin_layout Itemize
+пам’ять даних — 16 Кбайт
+\end_layout
+
+\begin_layout Itemize
+послідовна EEPROM пам’ять, 256 байт
+\end_layout
+
+\begin_layout Itemize
+два послідовні канали передачі даних RS-232
+\end_layout
+
+\begin_layout Itemize
+інтерфейс розширення (16 ліній вихід, 8 ліній вхід/вихід)
+\end_layout
+
+\begin_layout Itemize
+клавіатура 4х3
+\end_layout
+
+\begin_layout Itemize
+статична 4-розрядна семисегментна світлодіодна індикація
+\end_layout
+
+\begin_layout Itemize
+цифроаналовий та аналогоцифровий перетворювачі (плата розширення)
+\end_layout
+
+\begin_layout Itemize
+генератор з фіксованою частотою генерації — близько 10 КГц, генератор із
+ змінною частотою генерації від 1 КГц до 50 КГц (плата розширення)
+\end_layout
+
+\begin_layout Itemize
+динамічна 4-розрядна світлодіодна індикація (плата розширення)
+\end_layout
+
+\begin_layout Itemize
+пристрій дискретного вводу інформації: 2 кнопки
+\end_layout
+
+\begin_layout Itemize
+статична світлодіодна індикація, 8 шт.
+\end_layout
+
+\begin_layout Itemize
+знакосинтезуючий світлодіодний індикатор 5х7 (плата розширення)
+\end_layout
+
+\begin_layout Itemize
+рідкокристалічний дисплей
+\end_layout
+
+\begin_layout Itemize
+динамік (плата розширення)
+\end_layout
+
+\begin_layout Подраздел
+Обгрунтування вибору
+\end_layout
+
+\begin_layout Standard
+Вибір Форту у якості програмного середовища спричинений необхідністю простого
+ для реалізації доступу до електроніки на навчальному стенді EV8031
+/
+\lang ukrainian
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+
+\backslash
+
+\end_layout
+
+\end_inset
+
+AVR.
+ Використання або реалізація окремої операційної системи все-рівно потребували
+ би створення аналізатора команд і/або створення власної мови управління.
+\end_layout
+
+\begin_layout Standard
+Іншою цікавою можливістю при використанні Форта є його гнучкість.
+ Для цього було вибрано структуру з непрямим шитим кодом, адже вона забезпечує
+ можливість виконання програм при гарвардській архітектурі пам’яті.
+ Вибір архітектури також залежить від наявних ресурсів.
+ Оскільки у мікроконтролера ATmega8515 всього 8 Кбайт пам’яті ПЗУ, а у стенда
+ — 32 КБайт ОЗУ, то є зміст використовувати саме оперативну пам’ять для
+ виконавчих процедур, а пам’ять постійну використовувати для збереження
+ ядра.
+ Непрямий шитий код ідеально підходить для таких задач.
+\end_layout
+
+\begin_layout Standard
+Розглянутий вище AMforth не підходить для роботи по цій же причині.
+ Він компілює нові слова у постійну пам’ять, що може відбуватись повільно
+ , має обмеження у 4 Кслів, спричинює старіння пам’яті.
+ Проте його модулі можуть згодитись для вивчення структури Форт ядра, а
+ Форт модулі можуть прямо використовуватись для роботи на новому ядрі.
+\end_layout
+
+\begin_layout Пункт1
+Стекові процесори нового покоління GreenArrays
+\end_layout
+
+\begin_layout Standard
+У 2009 році американська компанія GreenArrays, Inc приступила до продажу
+ сімейства багаточіпових процесорних систем GA4, GA32, GA144 з чотирма,
+ 32-ма і 144-ма процесорами.
+ Кожен процесор у складі системи має власний ПЗУ і набір регістрів.
+ Набір команд організований у стековому виконанні.
+\end_layout
+
+\begin_layout Standard
+Вузли пронумеровані в зеленій мати один або кілька загальних цілей введення/виво
+ду.
+ Ті, в жовтому є цифрові вводу/виводу з спеціалізованих конфігурацій, які
+ можуть включати в себе загальні контакти і/або фантомні сигнали пробудження.
+ Вузли пронумеровані в синій оснащені аналоговим ввід/вивід.
+ Підписи під номери вузлів вказують ROM спеціалізації; червоні титри зарезервова
+ні для п'яти вузлів, які підтримують завантаження чіпа після скидання.
+ Виняток вузла двісті, який має особливе однопровідний послідовний отримати
+ код в ROM, але не озброєним для завантаження.
+\end_layout
+
+\begin_layout Standard
+Напрямки порт показані на кольорових барах розділяє вузлів.
+ У невеликих кількостях у зовнішній бари являють вводу/виводу сигнал позначення,
+ наприклад, сигнал 100, 17 (вузол 100 GPIO 17) пов'язане із двадцятим контактним
+ процесором.
+\end_layout
+
+\begin_layout Standard
+Використання у якості посередницької системи програмного середовища Форт
+ може допомогти при навчанні стековому програмуванню, адже середовище програмува
+ння для GA мікрокомп’ютерів F18A є стабільним, зрілим дизайном для комп'ютера
+ і його введення/виводу яких має надійність було доведено в багатьох чіп
+ конфігурацій.
+ Це було доведено в 180 нм геометрії, і прототип в 130 нм також працював
+ добре.
+ Комп'ютер мало, вісім вписується в приблизно квадратний міліметр.
+ Залежно від конфігурації чіпа, це дає між 100 000 і 200 000 комп'ютер на
+ 8 дюймів пластини, сприяє низька вартість наших чіпів.
+ 
+\end_layout
+
+\begin_layout Standard
+Швидкий, низькоенергетичний дизайн: наша прихильність до простоти підкріплюється
+ засобами розробки, що сили наші інженери, щоб протистояти і вирішувати
+ швидкість і енергія Витрати кожного елементу дизайну на кожній стадії макета
+ та моделювання процесу.
+ Ми постійно прагнути до мінімізації внутрішніх навантаження і схеми, завжди
+ готові винаходити не тільки неефективно звичайної конструкції, але і будь-якій
+ частині нашого власного.
+ F18A є безтактний, повністю асинхронний комп'ютер, який може виконувати
+ основні інструкції за 1.5 наносекунди.
+ На одну команду витрачається порядку 7 пікоджоулів енергії.
+ 
+\end_layout
+
+\begin_layout Standard
+Автономні ОЗП і стеки: кожен F18A містить 128 слів у пам'яті (До 512 команд)
+ плюс 20 слів стека і регістрів, немає пам'яті вузьких місць.
+ 18-бітові регістри S і T, двох верхніх елементів стека даних, R, верхній
+ елемент про повернення стека, і, для читання і запису реєстру.
+ Адресний регістр B має 9 біт, і лічильник P має 10.
+\end_layout
+
+\begin_layout Пункт1
+Можливості використання
+\end_layout
+
+\begin_layout Itemize
+Робототехніка 
+\end_layout
+
+\begin_layout Itemize
+маніпулятори/протези/автономно рухомі роботи; 
+\end_layout
+
+\begin_layout Itemize
+Нейронні мережі 
+\end_layout
+
+\begin_layout Itemize
+класифікація/розпізнавання сигналів/образів; 
+\end_layout
+
+\begin_layout Itemize
+«Бортові системи» 
+\end_layout
+
+\begin_layout Itemize
+діагностика стану в реальному часі/контроль руху; 
+\end_layout
+
+\begin_layout Itemize
+«Академічні» системи — апаратне забезпечення курсів цифрової обробки сигналів,
+ паралельного програмування, архітектури обчислювальних систем; 
+\end_layout
+
+\begin_layout Itemize
+«Персональні» обчислювальні системи — розширення ПК/планшетників/«гаджетів»;
+ 
+\end_layout
+
+\begin_layout Itemize
+Java/Lisp/Prolog - машини; 
+\end_layout
+
+\begin_layout Itemize
+Розпізнавання/синтез мови; 
+\end_layout
+
+\begin_layout Itemize
+Управління антенними системами (ЦАР, ФАР); 
+\end_layout
+
+\begin_layout Itemize
+Модулятори/демодулятори сигналів.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+newpage
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Раздел
+Будова форт-ядра 
+\end_layout
+
+\begin_layout Standard
+Традиційна форт-система складається з двох частин: виконуюче середовище
+ (її часто назвают VFM — віртуальна форт-машина) та транслятор.
+ Транслятор займається поглинанням вихідних текстів програм, VFM займається
+ виконанням програмного коду.
+\end_layout
+
+\begin_layout Standard
+Проте дві частини можуть працювати і незалежно.
+ VFM без транслятора може використовуватися для виконання компільованою
+ раніше програми.
+ Якщо ця програма в процесі виконання сама нічого не транслює, то транслятор
+ їй не потрібен і може бути відсутнім.
+ Багато прикладних програм на Форті можуть ставитися до цього класу — використов
+уватися без транслятора Форту, тільки з VFM.
+\end_layout
+
+\begin_layout Standard
+Транслятор без VFM використовується, наприклад, при цільовій компіляції
+ — cтворення програми для іншої платформи — коли цільова VFM просто не може
+ працювати на інструментальній VFM.
+ У цьому разі цільової компілятор просто створює код для цільової платформи,
+ виконувати його буде вже інша VFM на іншому комп'ютері.
+\end_layout
+
+\begin_layout Standard
+Прийнято вважати, що відмінні риси віртуальної машини Форту — наявність
+ двох стеків, шитий код і адресний інтерпретатор.
+ Насправді перше — зручний варіант реалізації прийнятого в Форті способу
+ передачі параметрів, друге і третє — просто окремий випадок способу кодогенерац
+іі і його виконання.
+ Форт може компілювати звичайний машинний код, що не вимагає адресної інтерпрета
+ції, може компілювати байт-код, вимагає інтерпретації, але не адресною,
+ і т.п., і при цьому продовжувати залишатися Фортом.
+\end_layout
+
+\begin_layout Standard
+Абсолютно переважна більшість мов програмування використовують стек для
+ передачі параметрів і для зберігання адрес повернень з підпрограм (функцій,
+ процедур).
+ Більшість роблять це неявним чином — програміст не оперує з поняттям 
+\begin_inset Quotes fld
+\end_inset
+
+стек
+\begin_inset Quotes frd
+\end_inset
+
+.
+ Але їх виконують середовища — практично завжди використовують стек.
+ Це дуже зручна конструкція для зберігання точок повернення при виклику
+ багаторазово вкладені підпрограм, для передачі параметрів і для зберігання
+ тимчасових локальних змінних.
+\end_layout
+
+\begin_layout Standard
+Але більшості мов вистачає одного стека.
+ Форт — представник досить нечисленного класу процедурних мов.
+ Більшість мов оперує з функціями — видом підпрограм, повертають одне значення
+ в якості результату.
+ Повернути кілька значень функція може тільки або записуючи їх у змінні,
+ чиї адреси передаються в якості параметрів, або повертаючи в якості результату
+ покажчик на структуру, що містить кілька значень.
+ При виході з функції дані на стеку, використовувані при роботі цією функцією,
+ можуть бути безболісно зняті з стека.
+ І адреса повернення теж.
+ На стеку або нічого не повертається (зазвичай результат функції при поверненні
+ зберігається в регістрі процесора), або повертається відоме число елементів
+ — один елемент.
+ Процедура Форту може використовувати аналогічні способи, але може і повернути
+ декілька значень на тому ж стеку, на якому передавалися параметри (це плюс,
+ а не мінус, але плюси пізніше).
+ І якщо при виклику процедури поміщати адресу повернення в стек над параметрами
+ процедури (як робиться у функціональних мовами), то доведеться приймати
+ спеціальні заходи, щоб витягти цю адресу з під повертаються значень і ще
+ й "згуртувати" дані на стеку для ліквідації "дірки" від адреси повернення.
+ Можна придумати різні способи для вирішення цієї проблеми, але хтось колись
+ вирішив цю проблему з перемішуванням даних і адрес повернень на одному
+ стеку просто не створювати - і так з'явилися два стеки: один для параметрів
+ процедур і повертаються значень, інший для адрес повернення.
+ Це зручно і досить ефективно, тому широко застосовується в Форті.
+\end_layout
+
+\begin_layout Standard
+Однак Форт міг би існувати і з одним стеком, і з трьома, це для мови не
+ принципово.
+ На жаль, у Форті утвердилася практика використання другого стека (стека
+ повернень) не тільки за прямим призначенням автоматично при викликах/повернення
+х з процедур, але і явних ручних маніпуляцій з цим стеком для зберігання
+ безіменних локальних і тимчасових змінних і навіть для ручного втручання
+ в хід повернень з процедур (що порушує принципи структурного програмування).
+ З іншого боку, форт не змушує цим користуватися, так що і боротися з цим
+ явищем не потрібно.
+ Я просто намагався показати, що наявність двох стеків не є невід'ємною
+ частиною Форту і його відмінною рисою.
+\end_layout
+
+\begin_layout Standard
+Що ж тоді є відмінною рисою віртуальної машини Форту? По-моєму, у неї немає
+ зовнішніх відмінних рис, крім того факту, що Форт використовує не функції,
+ а процедури.
+ Внутрішні ж структури — стеки, способи компіляції і виконання коду, і т.д.
+ — залежать від конкретної реалізації.
+ Інших якихось особливих рис, типу 
+\begin_inset Quotes fld
+\end_inset
+
+загальної спискофікації
+\begin_inset Quotes frd
+\end_inset
+
+ Ліспу або 
+\begin_inset Quotes fld
+\end_inset
+
+загальної об'єктизаціею
+\begin_inset Quotes frd
+\end_inset
+
+ Смолтолка з автоматичними збирачами сміття у Форт-машині немає.
+ Форт-машина дуже близька до звичайних процесорів і тому гранично проста
+ в реалізації.
+\end_layout
+
+\begin_layout Подраздел
+Шитий код 
+\end_layout
+
+\begin_layout Standard
+Основою Форта є техніка адресної інтерпретації 
+\begin_inset Quotes fld
+\end_inset
+
+шитий код
+\begin_inset Quotes frd
+\end_inset
+
+.
+ При шитому коді ланцюжки адрес підпрограм складаються послідовно (
+\begin_inset Quotes fld
+\end_inset
+
+зшиваються
+\begin_inset Quotes frd
+\end_inset
+
+) і формують нову підпрограму.
+ Адресний інтепретатор згодом проходить по такому ланцюжку, послідовно запускаюч
+и підпрограму по зчитаній адресі.
+ За багато років з’явилось багато варіацій шитого коду і вибір конкретної
+ залежить від багатьох обставин: типу процесора, кількості пам’яті, потрібної
+ швидкодії.
+ Для правильного вибору потрібно знати, які бувають види ШК і як вони утворюютьс
+я.
+\end_layout
+
+\begin_layout Пункт1
+Непрямий шитий код (Рисунок 
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "f:threaded-indirect"
+
+\end_inset
+
+
+\lang ukrainian
+)
+\end_layout
+
+\begin_layout Standard
+Класичний тип шитого коду для Форту, описана у більшості книгах.
+ Всі інші техніки є покращеннями даної.
+ 
+\end_layout
+
+\begin_layout Standard
+Розглянемо приклад Форт-визначення слова SQUARE:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+: SQUARE DUP * ;
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+В типовому Форті, основаному на непрямому ШК, код буде розміщений в пам’яті
+ так, як показано на рисунку 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "f:threaded-indirect"
+
+\end_inset
+
+.
+ Вказівник інтепретації (IP) повинен вказувати на комірку в пам’яті, що
+ зберігається всередині цього 
+\begin_inset Quotes fld
+\end_inset
+
+іншого
+\begin_inset Quotes frd
+\end_inset
+
+ слова, котре зберігає адресу слова SQUARE.
+ Інтепретатор отримує цю адресу і використовує її для отримання вмісту поля
+ коду слова SQUARE.
+ Вміст даної комірки являє собою адресу машинної підпрограмми, котра виконує
+ слово SQUARE.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+begin{figure}[h]
+\end_layout
+
+\begin_layout Plain Layout
+
+%
+\backslash
+begin{center}
+\end_layout
+
+\begin_layout Plain Layout
+
+%
+\backslash
+noindent
+\backslash
+includegraphics[bb=1in 0 7in 220, width=4in]{threaded-indirect.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+%
+\backslash
+caption{Непрямий шитий код}
+\end_layout
+
+\begin_layout Plain Layout
+
+%
+\backslash
+label{f:threaded-indirect}
+\end_layout
+
+\begin_layout Plain Layout
+
+%
+\backslash
+end{center}
+\end_layout
+
+\begin_layout Plain Layout
+
+%
+\backslash
+end{figure}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}
+\backslash
+includegraphics[width=0.7
+\backslash
+paperwidth]{threaded-indirect.png}
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Непрямий шитий код
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "f:threaded-indirect"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Якщо SQUARE написано в машинному коді, тоді завдання інтепретатора на цьому
+ завершується.
+ Код би виконався і потім сам повернув управління адресному інтепретатору.
+ Проте, якщо SQUARE — високорівневе слово (визначене через двокрапку), воно
+ містить не машинний код, а список адрес.
+ Для виконання даного слова інтепретатор повинен перезапуститись на новий
+ потік адрес — поле параметрів слова SQUARE.
+ Для цього у полі коду знаходиться адреса так званої процедури ENTER (або
+ DOCOLON), яка зберігає у стек старе значення IP і записує у IP нове значенн
+ — адресу поля параметрів.
+ Для повернення у попереднє слово використовується підпрограма EXIT, котра
+ просто відновлює зі стеку попередню адресу IP (до входу в слово SQUARE).
+\end_layout
+
+\begin_layout Standard
+Переваги шитого кода:
+\end_layout
+
+\begin_layout Itemize
+одна комірка (2 байта) на адресу
+\end_layout
+
+\begin_layout Itemize
+можливість розміщення коду у оперативній пам’яті (виконання коду при Гарвардські
+й архітектурі пам’яті)
+\end_layout
+
+\begin_layout Itemize
+класична схема
+\end_layout
+
+\begin_layout Itemize
+переносимість
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Недоліки:
+\end_layout
+
+\begin_layout Itemize
+подвійний рівень непрямого адресування, внаслідок цього 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+змен
+\backslash
+-ше
+\backslash
+-на
+\backslash
+
+\backslash
+
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+швид
+\backslash
+-ко
+\backslash
+-дія
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Пункт1
+Прямий шитий код (Рисунок 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "f:threaded-direct"
+
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Standard
+Прямий ШК відрізняється від непрямого тільки наявністю машинного коду в
+ полі параметрів (замість вказівника на адресу).
+ Фактично, комірка містить команду процесора CALL, яка і викликає потрібний
+ машинний код для слова.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement h
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}
+\backslash
+includegraphics[width=0.7
+\backslash
+paperwidth]{threaded-direct.png}
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Прямий шитий код
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "f:threaded-direct"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Переваги:
+\end_layout
+
+\begin_layout Itemize
+виграш у швидкості роботи перед непрямим ШК — на третину зменшене слово
+ NEXT
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Недоліки:
+\end_layout
+
+\begin_layout Itemize
+збільшено на один-два байти поле коду
+\end_layout
+
+\begin_layout Itemize
+код потрібно розміщувати у області пам’яті, доступної на виконання (потрібна
+ Фон-Нейманівська архітектура пам’яті)
+\end_layout
+
+\begin_layout Пункт1
+Підпрограмний шитий код (Рисунок 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "f:threaded-subroutine"
+
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Standard
+Підпрограмний шитий код відрізняється відсутністю вираженого адресного інтепрета
+тора, його роль виконують команди процесора CALL і RET, а показник поточної
+ адреси IP співпадає з регістром IP процесора.
+ Поле параметрів складається з підпрограмних викликів машинних процедур
+ і, відповідно, високорівневі слова також являються машинними процедурами.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement h
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}
+\backslash
+includegraphics[width=0.7
+\backslash
+paperwidth]{threaded-subroutine.png}
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Підпрограмний шитий код
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "f:threaded-subroutine"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Переваги:
+\end_layout
+
+\begin_layout Itemize
+найвища швидкодія
+\end_layout
+
+\begin_layout Itemize
+єдиність механізму роботи процесора і адресного інтепретатора
+\end_layout
+
+\begin_layout Itemize
+зменшено кількість використовуваних регістрів
+\end_layout
+
+\begin_layout Itemize
+широкий діапазон для оптимізації типу інлайн-вставок
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Недоліки:
+\end_layout
+
+\begin_layout Itemize
+складність декомпіляції коду
+\end_layout
+
+\begin_layout Itemize
+збільшений розмір
+\end_layout
+
+\begin_layout Itemize
+неможливість динамічного додавання нових слів у Гарвардській архітектурі
+ пам’яті (при відсутності доступу до перезапису кодової пам’яті)
+\end_layout
+
+\begin_layout Пункт1
+Згорнутий шитий код (Рисунок 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "f:threaded-token"
+
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Standard
+Згорнутий (або токенізований) шитий код придуманий для зменшення розміру
+ високорівневих визначень і є різновидом непрямого.
+ Поле параметрів є списком однобайтних адрес на таблицю слів.
+ В самій же таблиці слів знаходяться реальні, двобайтні, адреси слів.
+ Тобто, додано ще один рівень непрямого адресування.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement h
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}
+\backslash
+includegraphics[width=0.7
+\backslash
+paperwidth]{threaded-token.png}
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Згорнутий шитий код
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "f:threaded-token"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Переваги:
+\end_layout
+
+\begin_layout Itemize
+найменший можливий розмір коду високорівневих слів
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Недоліки:
+\end_layout
+
+\begin_layout Itemize
+обмеження у 256 слів
+\end_layout
+
+\begin_layout Itemize
+потрібна таблиця розміром щонайменше 512 байт
+\end_layout
+
+\begin_layout Itemize
+повільна інтепретація
+\end_layout
+
+\begin_layout Подраздел
+Регістри і стеки
+\end_layout
+
+\begin_layout Standard
+Регістрова адресація використовується дуже часто при програмуванні мікроконтроле
+рів.
+ Проте Форт не використовує її для виконання задач.
+ Для арифметичних операцій Форт використовує нуль-операндну систему командних
+ слів.
+ Передача числових параметрів відбувається неявно, через стек.
+\end_layout
+
+\begin_layout Пункт1
+Стек даних
+\end_layout
+
+\begin_layout Standard
+Основною абстракцією при роботі з даними у Форті є стек даних.
+ Стек даних — програмно або апаратно реалізований список, що працює по принципу
+ 
+\begin_inset Quotes fld
+\end_inset
+
+перший ввійшов — останній вийшов
+\begin_inset Quotes frd
+\end_inset
+
+.
+ Через стек даних відбувається передача параметрів слів-функцій.
+ Основні параметри стеку даних:
+\end_layout
+
+\begin_layout Itemize
+розрядність
+\end_layout
+
+\begin_layout Itemize
+глибина
+\end_layout
+
+\begin_layout Itemize
+реалізація - програмна чи процесорна
+\end_layout
+
+\begin_layout Itemize
+розміщення
+\end_layout
+
+\begin_layout Пункт1
+Стек повернень
+\end_layout
+
+\begin_layout Standard
+Стек повернень — стек, що використовується адресним інтерпретатором для
+ збереження/відновлення точки входу у високорівневому слові.
+ Арифметичні операції зі стеком повернень як правило не працюють, проте
+ доступ до нього не закривається у більшості реалізацій Форта.
+ Це дозволяє використовувати стек повернень для тимчасового збереження даних,
+ проте може призвести до порушення цілісності адресної інтерпретації.
+ Стек повернень найчастіше реалізовується на процесорних операціях PUSH
+ і POP.
+ Тому розрядність його майже завжди дорівнює розрядності адреси, а глибина
+ обмежена тільки кількістю вільної пам’яті.
+\end_layout
+
+\begin_layout Пункт1
+Додаткові стеки
+\end_layout
+
+\begin_layout Standard
+Для зручної роботи також використовуються наступні стеки:
+\end_layout
+
+\begin_layout Itemize
+циклів
+\end_layout
+
+\begin_layout Itemize
+контекстів
+\end_layout
+
+\begin_layout Itemize
+стек дробових чисел
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Проте вони не є обов’язковими і в простих реалізаціях можуть бути відсутні.
+\end_layout
+
+\begin_layout Пункт1
+Використання регістрів
+\end_layout
+
+\begin_layout Standard
+За рахунок нуль-операндних функцій, для реалізації Форта потрібно всього-лиш
+ 3 регістра для повноцінної роботи.
+ Цей приклад показує, що єдина хороша функція регістрів процесора — кешування
+ системних змінних Форта.
+ Індексні регістри відходять під стек даних і IP, інші відходять під робочий
+ регістр W, ще один під верхні один-два елементи стеку даних.
+ Всі інші можуть використовуватись як тимчасові для асемблерних процедур.
+\end_layout
+
+\begin_layout Standard
+Очевидно, розміщення регістрів індивідуальне для кожного сімейства мікроконтроле
+рів.
+ Акумуляторні процесори містять небагато індексних регістрів, тому реалізація
+ Форт інтерпретатора на них супроводжується постійним збереженням/відновленням
+ вказіників IP і DSP.
+\end_layout
+
+\begin_layout Standard
+Стек — це структура, в яку 
+\begin_inset Quotes fld
+\end_inset
+
+останнім увійшов, першим вийшов
+\begin_inset Quotes frd
+\end_inset
+
+, тобто як магазин автомата Калашникова, пристрій для відкладання чогось
+ на потім і діставання у зворотному порядку.
+ Де ми в наших прикладах відкладали операнди і операції і виконували їх
+ потім у зворотному порядку? Правильно, в прикладі 5 програмі на С.
+ Саме стек використовується транслятором С для розгортання запису виду N
+ = N +5 в послідовність машинних команд 
+\begin_inset Quotes fld
+\end_inset
+
+Взяти адресу N, витягти значення, взяти 5, скласти їх, взяти адресу N і
+ записати туди суму
+\begin_inset Quotes frd
+\end_inset
+
+, так як тільки таку лінійну послідовність команд може виконати процесор.
+ Тобто програміст, маючи на увазі цю послідовність команд, записує її на
+ С задом наперед, потім транслятор С, розгортає її в пряму послідовність
+ команд і в цьому вигляді вона може бути виконана процесором.
+ 
+\end_layout
+
+\begin_layout Standard
+Стек і зворотний запис в наявності.
+ У Форті у всіх прикладах послідовність одна і та ж — пряма, ніякого забігання
+ вперед для обчислення відсутніх операндів.
+ Кожне слово працює вже з обчисленими раніше операндами.
+ І саме як тимчасове сховище обчислених раніше операндів і використовується
+ стек у Форте.
+ У прикладі 3 на стеку Форту зберігалося два операнди — 2 і 3, і слово 
+\begin_inset Quotes fld
+\end_inset
+
++
+\begin_inset Quotes frd
+\end_inset
+
+ брало їх звідти.
+ У тому ж прикладі на С при обчисленнях на стеку виявляються не тільки відкладен
+і операнди, але і відкладена операція.
+ Як би там не було — результат один — лінійний машинний код.
+ При виконання цього коду стек може бути присутнім, а може й не бути в обох
+ мовах.
+ Наприклад, якщо операнди в С з плаваючою крапкою, то вони обидва при виконанні
+ потраплять на стек співпроцесора x87 та операції над ними виробляться там
+ в точності також, як над операндами Форту на внутрішньому стеку Форт-процесора
+ або програмної FVM.
+ Це залежні від реалізації малоістотні деталі.
+ Стеки мають місце у всіх сучасних мовах програмування.
+ Форт може бути 
+\begin_inset Quotes fld
+\end_inset
+
+більш стековий
+\begin_inset Quotes frd
+\end_inset
+
+ тільки за рахунок того, що у нього є багато операцій для маніпуляції цим
+ стеком в явному вигляді, тоді як в інших мовах цей стек для програміста
+ доступний тільки як контейнер для параметрів і локальних змінних, з можливістю
+ звернення до них тільки по іменах.
+ У Форте теж можна використовувати іменовані локальні змінні, але можна
+ обходитися і без них.
+\end_layout
+
+\begin_layout Standard
+У С ми маємо суміш префіксного, інфіксного і постфіксного типу запису.
+ Крім того, не обійтися без дужок і роздільників виразів 
+\begin_inset Quotes fld
+\end_inset
+
+;
+\begin_inset Quotes frd
+\end_inset
+
+.
+ Дужки групують операнди та операції — тобто кажуть транслятору я не хочу
+ виконувати операції по порядку, а хочу задом наперед і упереміш.
+ Крапка з комою говорить транлятору що пора зупиниться в забіганні вперед
+ і пора піти по стеку відкладених операцій і операндів тому для розгортання
+ 
+\begin_inset Quotes fld
+\end_inset
+
+зворотної американської запису
+\begin_inset Quotes frd
+\end_inset
+
+ в лінійну послідовність команд для комп'ютерів Фон-неймановскої архітектури.
+ У Форте у всіх прикладах один і той же примітивний порядок запису - пряма
+ послідовність дій.
+ Дужки там не потрібні - якщо потрібна інша послідовність виконання команд,
+ то в Форте це можна записати у вигляді саме цієї іншій послідовності.
+ 
+\end_layout
+
+\begin_layout Standard
+Дужки у Форте використовуються для коментування.
+ І обмежувач пропозицій не потрібен, тому що не потрібно повертатися тому.
+ На кожний момент часу все що було 
+\begin_inset Quotes fld
+\end_inset
+
+раніше
+\begin_inset Quotes frd
+\end_inset
+
+ — вже виконано і повертатися нема чого.
+ Крапка з комою використовується у Форті тільки в Наприкінці визначення
+ процедури (до речі, це даремно, можна теж не обмежувати, але про це пізніше).
+\end_layout
+
+\begin_layout Standard
+Система запису Форту може здатися складним тільки на перший поверхневий
+ погляд.
+ Насправді синтаксис Форту ви вже вивчили - слова та прогалини, і нічого
+ більше.
+ А згадайте скільки років ви вивчали алгебраїчну форму запису, на якій засновани
+й мова С.
+ Форт — синтаксично найпростіший мову.
+ І якщо десь зустрічаються складності, то справа не в Форт-ідеології, а
+ в реалізації конкретних слів.
+ Набір слів стандартного Форту дійсно дуже незвичайний і хаотичний.
+ Причина — хаотичний розвиток протягом 30 років.
+ Неоптимальність мовних конструкцій — хвороба більшості мов, особливо таких
+ старих як Форт.
+ Але Форт гнучкий, і ви можете не використовувати ті його кошти, які вам
+ не сподобаються.
+ Більше того, ви можете ті кошти мови, які вважаєте за потрібне - приклади
+ будуть в цій статті.
+\end_layout
+
+\begin_layout Подраздел
+Слова
+\end_layout
+
+\begin_layout Standard
+Слово — основна абстракція в Форті.
+ Її аналог в інших мовах програмування — функція або процедура.
+ Слова Форта організуються у словник — однозв’язний список з так званих
+ 
+\begin_inset Quotes fld
+\end_inset
+
+словникових статтей
+\begin_inset Quotes frd
+\end_inset
+
+.
+ Словникова стаття складається з заголовку і коду слова.
+ Заголовок використовується для пошуку потрібного слова у словнику, а код
+ (поле параметрів) проганяється через адресний інтепретатор.
+ 
+\end_layout
+
+\begin_layout Standard
+Існує певний набір примітивів — слів, які рекомендовані для реалізації будь-яким
+ Фортом, проте даний набір не є чимось постійним і може як завгодно модифікувати
+сь програмістом під свої потреби.
+\end_layout
+
+\begin_layout Standard
+Слова можуть реалізовуватись на асемблері, а можуть складатись з інших Форт-слів.
+ Останні в свою чергу називаються високорівневими словами.
+\end_layout
+
+\begin_layout Standard
+Рядок з слів, розділених прогаликом, називається Форт-програмою, і така
+ Форт-програма може виконуватись на Форт-інтепретаторі.
+\end_layout
+
+\begin_layout Пункт1
+Форт-інтепретатор
+\end_layout
+
+\begin_layout Standard
+Форт-інтепретатор є прикладом організації одного з найпростіших методів
+ текстового управління потоком команд процесора.
+ Він забезпечує ввід команд від користувача і ввід нових програм.
+ Разом з адресним інтепретатором він утворює середовище програмування, яке
+ надзвичайно просте для реалізації і при цьому залишається достатньо потужним.
+\end_layout
+
+\begin_layout Standard
+Форт відноситься до конкатенативних мов програмування.
+ Конкатенативні програми утворюються шляхом долучення управляючих слів до
+ основної програми і вони можуть виконуватись паралельно з отриманням коду.
+ Конкатенативні мови як правило мають елементарний синтаксис.
+ У випадку Форта — слова розділені прогаликом.
+\end_layout
+
+\begin_layout Standard
+При інтепретації відбуваються наступні дії:
+\end_layout
+
+\begin_layout Enumerate
+З вхідного потоку видаляються розділюючі символи
+\end_layout
+
+\begin_layout Enumerate
+Виділяється слово (обмежене розділюючими символами)
+\end_layout
+
+\begin_layout Enumerate
+Виконується пошук слова у словнику по принципу зв’язаного списку.
+ Якщо не знайдено, то видається помилка.
+ Якщо знайдено, то адреса поля коду кладеться на стек даних
+\end_layout
+
+\begin_layout Enumerate
+Отримана адреса передається слову EXECUTE (в режимі інтепретації) або слову
+ COMPILE (в режимі компіляції).
+\end_layout
+
+\begin_layout Enumerate
+Повторити з пункту a)
+\end_layout
+
+\begin_layout Пункт1
+Словник
+\end_layout
+
+\begin_layout Standard
+Для описаного вище циклу транслятора, не вистачає реалізації слова
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+
+\backslash
+
+\end_layout
+
+\end_inset
+
+ TranslateWord, яке повинно проводити пошук слів у словнику і виконувати
+ або компілювати слово.
+ Якщо пошук завершився невдачею — спробувати використовувати слово як літерал.
+\end_layout
+
+\begin_layout Standard
+Процедури Форту — слова — зберігаються в лінійних списках — словниках.
+ Слова при визначенні додаються в кінець списку, і пошук починається з кінця
+ списку, щоб дозволити перевизначення слів.
+ Словників може бути кілька, і пошук слова транслятором виробляється в кількох
+ словниках.
+ Поточний набір словників, які підлягають перегляду, та порядок пошуку задається
+ у спеціальному стеку словників.
+ Цей стек називають контекстом.
+\end_layout
+
+\begin_layout Standard
+Стандартне слово Форту для пошуку в контексті — FIND, однак воно не зовсім
+ зручно, тому що використовує рядок з лічильником як параметр, і повертаються
+ їм значень для деяких застосувань недостатньо.
+ Слово SEARCH-WORDLIST шукає тільки в одному словнику, і теж повертає неповний
+ набір результатів, тому ми реалізуємо свій набір слів для пошуку.
+\end_layout
+
+\begin_layout Standard
+Словники Форту (vocabulary) фактично є пов'язаними списками пар ключ-значення
+ і є близькими аналогами асоціативних масивів, словників (dictionary) і
+ т.п.
+ структур, що є в багатьох інших мовах програмування.
+ Точніше майже у всіх мовах, так як без такої зручної структури обійтися
+ складно.
+ З широко відомих мов словники або їх інші назви є в Perl, PHP, PostScript,
+ Smalltalk, Lisp і т.д.), так що поширена думка про особливу унікальності
+ словників Форту на мій погляд невірно.
+ Хоча є відмінності в реалізації.
+ Наприклад, прапори у елементів словника зустрічаються в інших мовах нечасто
+ (я знаю тільки в PostScript), з іншого боку ці прапори можна 
+\begin_inset Quotes fld
+\end_inset
+
+емулювати
+\begin_inset Quotes frd
+\end_inset
+
+ і в інших мовах.
+\end_layout
+
+\begin_layout Standard
+Відповідно до ANS Forth94, словники офіційно тепер називаються WORDLIST
+ — список слів.
+\end_layout
+
+\begin_layout Standard
+Словник можна розглядати як окремий випадок більш простої структури — списку.
+ Кожен елемент списку має вміст і покажчик на наступний елемент.
+ У випадку словника вмістом елемента списку буде пара покажчиків — на ім'я
+ та значення елемента словника.
+ Якщо елемент словника — процедура, то ім'я — це ім'я процедури, а значення
+ — адреса коду процедури (не обов'язково реальну адресу, а те що в стандарті
+ називається execution token, тобто якесь посилання, яку може виконати слово
+ EXECUTE).
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Пункт1
+Компіляція і інтерпретація
+\end_layout
+
+\begin_layout Standard
+Однією з особливостей роботи Форта є робота у двух режимах — інтепретації
+ та компіляції.
+ При інтепретації слова з вхідного потоку запускаються на миттєве виконання.
+ При компіляції, слова із вхідного потоку перетворюються у адреси поля коду
+ і дописуються до словника.
+ Таким чином, можна скомпілювати нове високорівневе слово і згодом викликати
+ його на виконання.
+ 
+\end_layout
+
+\begin_layout Standard
+Компільовані слова мають переваги.
+ Вони виконуються швидше і дозволяють умовні переходи/цикли.
+\end_layout
+
+\begin_layout Standard
+В режимі інтепретації можна створювати змінні і організовувати задачі.
+ Також тимчасовий режим інтерпретації використовується для оптимізації компіляці
+ї літералів.
+ 
+\end_layout
+
+\begin_layout Подраздел
+Багатозадачність 
+\end_layout
+
+\begin_layout Standard
+Багатозадачність в Форті найпростіше організувати за допомогою сопроцедур.
+\end_layout
+
+\begin_layout Standard
+Кооперативна багатозадачність — це вид багатозадачності, при якій кожна
+ процедура сама вказує місце, де її можна перервати і передати управління
+ іншій задачі, без втрати важливих даних.
+ Даний метод забезпечує надійне псевдопаралельне виконання програм, проте
+ потребує спеціального проектування програми.
+\end_layout
+
+\begin_layout Standard
+Переваги кооперативної багатозадачності у відсутності необхідності захизати
+ усі структури даних об’єктами типу критичних секцій і м’ютексів, що спрощує
+ програмування і перенесення коду з однозадачних у багатозадачні.
+\end_layout
+
+\begin_layout Standard
+Недоліками є неможливість роботи системи у випадку помилки в одній з процедур:
+ не відбувається передача керування процесорним часом.
+ Ускладнена робота з вводом-виводом.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+newpage
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Раздел
+Проектування системи 
+\end_layout
+
+\begin_layout Standard
+Архітектура Форт системи вибрана по класичному представленню.
+ Серед набору шитих кодів вибрано саме непрямий, завдяки економному використанню
+ пам’яті і можливості виконання коду з ОЗП.
+\end_layout
+
+\begin_layout Standard
+При подачі живлення відбуваються наступні кроки:
+\end_layout
+
+\begin_layout Itemize
+ініціалізація стеку і зовнішньої пам’яті
+\end_layout
+
+\begin_layout Itemize
+копіювання початкової Форт-прошивки з ПЗП до ОЗП
+\end_layout
+
+\begin_layout Itemize
+заповнення системних змінних в ОЗП
+\end_layout
+
+\begin_layout Itemize
+перехід до очікування вводу програми по УАПП
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Такий підхід дозволяє спростити алгоритми, що використовуються у програмі,
+ до мінімуму і швидше приступити до написання важливих слів.
+\end_layout
+
+\begin_layout Standard
+В якості стандарту вибрано стандарт 1984 року в зв’язку з відсутністю потреби
+ у обчисленнях з плаваючою комою.
+ 
+\end_layout
+
+\begin_layout Standard
+AVR призначене для функцій цифрової обробки даних, контролю периферії.
+ Також компанією заявляється висока щільність коду (компактність), що в
+ принципі підтверджується тестами та дослідженнями.
+ AVR32 має шістнадцять регістрів, об'єднаних в регістровий файл (регістри
+ R0-R15).
+ Варто відзначити, що покажчик стека (SP), програмний лічильник (PC) і регістр
+ зв'язку (LR) відображаються в регістровому файлі — регістри R13, R15 і
+ R14 відповідно.
+ Можливе виконання інструкцій, таких як, додавання і віднімання з використанням
+ SP, PC і LR регістрів, що призводить до більш ефективної адресації пам'яті.
+ Дані регістри можуть використовуватися в якості операнда джерела або приймача
+ (регістру призначення) у всіх інструкціях, які використовують реєстрові
+ операнди, включаючи арифметичні або логічні інструкції та інструкції завантажен
+ня/збереження.
+ 
+\end_layout
+
+\begin_layout Standard
+Інструкції, які використовують PC як приймач, слід розглядати як інструкції
+ переходу.
+ Це має на увазі, що очищається конвеєр і виконання поновлюється з адреси,
+ обумовленим новим значенням PC.
+ Регістр R12 призначений для повернення значення з функцій виклику, а так
+ само виступає як приховане значення, що повертається команд переміщення
+ і тестування.
+ Багатоадресні команди завантаження і витягання з стека мають ті ж самі
+ функціональні можливості, які дозволяють їм використовуватися як інструкції
+ повернення.
+ 
+\end_layout
+
+\begin_layout Standard
+Покажчик стека також неявно використовується деякими інструкціями.
+ У всіх режимах регістр загального призначення R14 використовується як регістр
+ зв'язків (LR).
+ Він зберігає адресу повернення з програми.
+ Коли підпрограма виклику виконується різновидом команд call LR запам'ятовує
+ адресу повернення з програми.
+ Повернення з підпрограми відбувається при копіюванні LR в PC однією з різновидо
+м команди mov таких як ldm, popm або ret.
+ У всіх інших випадках регістр зв'язків R14 можна використовувати як регістр
+ загального призначення.
+ Для роботи з числами подвійної точності використовуються реєстрові пари
+ R0-R1, R2-R3 і т.д.
+ Ортогональний набір команд ядра AVR32 дозволяє всі регістри використовувати
+ як покажчики.
+ 
+\end_layout
+
+\begin_layout Standard
+Процесор має набір інструкцій для цифрової обробки сигналів: множення з
+ накопиченням — MAC, команди SIMD та інструкції підтримки мови JAVA.
+ Архітектура AVR32 визначає різні мікроархітектури, що мають відмінні характерис
+тики за величиною витрат і збереження енергії, складу регістрів і порядок
+ опрацювання переривань і виняткових ситуацій.
+\end_layout
+
+\begin_layout Подраздел
+Створення програмного середовища
+\end_layout
+
+\begin_layout Standard
+Вибір програмного середовища є важливим кроком при розробці програмного
+ проекту.
+ Цей вибір залежить від великої кількості факторів і індивідуальний для
+ кожного проекту.
+ 
+\end_layout
+
+\begin_layout Standard
+Для виконання даної роботи було вибрано мову програмування асемблер.
+ Вибір впав не в поле зору С через наступні причини:
+\end_layout
+
+\begin_layout Enumerate
+Форт має достатньо просту і прозору структуру, щоб його можна було без великих
+ затрат реалізовувати на асемблері
+\end_layout
+
+\begin_layout Enumerate
+при програмуванні віртуальної машини важливе точне використання конкретних
+ регістрів; автоматичне розприділення пам’яті може призвести до псування
+ інформації у системних регістрах
+\end_layout
+
+\begin_layout Enumerate
+зберігання системних регістрів у пам’яті призводить до заповільнення роботи
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+В якості інтегрованої системи розробки було вибрано редактор geany.
+ Даний редактор дозволяє без додаткових налаштувань виконувати скриптові
+ файли, додає підсвітку коду, проводить початковий аналіз коду.
+\end_layout
+
+\begin_layout Standard
+З урахуванням можливостей різних варіантів архітектур (AVR32A, 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+
+\backslash
+
+\end_layout
+
+\end_inset
+
+AVR32B), «системні» регістри форт-машини розташовуються в регістрах з R8
+ по R15.
+ Основне завдання при специфікації функцій регістрів - знайти оптимальний
+ розподіл регістрів, мінімізувати кількість проміжних операцій при моделюванні
+ роботи стекової машини.
+ До розгляду пропонується модель FVM з кешуванням верхніх елементів стеків
+ повернення і даних.
+ Дана модель дозволяє зберігати основні регістри форт системи при виникненні
+ переривань для будь-якої мікроархітектури процесора.
+ Дозволяє за рахунок двох тимчасових регістрів кешувати дані стека для здійсненн
+я арифметико-логічних операцій, як одинарної, так і подвійної точності,
+ тимчасово зберігаючи дані в реєстрових парах.
+ При створенні ядра віртуальної форт-машини були розглянуті набори слів,
+ що реалізовуються в різних системах на низькому рівні.
+ 
+\end_layout
+
+\begin_layout Standard
+Регістр позначення функція в FVM PC (R15) PC програмний лічильник LR (R14)
+ R0 вершина стека повернень SP (R13) RP покажчик стека повернень R12 B індексний
+ регістр/регістр тимчасового зберігання даних R11 S/A індексний регістр/регістр
+ тимчасового зберігання даних/другий елемент стека даних R10 T вершина стека
+ даних R9 SP покажчик стека даних R8 U покажчик користувацької області R7-R0
+ відведені під локальні змінні ACBA базовий регістр виклику підпрограм/функцій.
+ Може бути використаний, як покажчик поточного словника системи JAVA_LVx
+ регістри локальних змінних.
+ В тому випадку, якщо є можливість використовувати їх в RISC режимі
+\end_layout
+
+\begin_layout Подраздел
+Реалізація віртуальної машини і базового набору слів 
+\end_layout
+
+\begin_layout Standard
+Віртуальна машина створена по класичному методу.
+ В її основі лежать три процедури: NEXT, ENTER і EXIT.
+ Кожна з них виконує свої важливі функції.
+ Приведемо лістинги даних процедур на мові програмування абстрактного асемблера.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+NEXT:
+\end_layout
+
+\begin_layout Plain Layout
+
+	ld Wl, IP+
+\end_layout
+
+\begin_layout Plain Layout
+
+	ld Wh, IP+
+\end_layout
+
+\begin_layout Plain Layout
+
+	ld ZL, W+
+\end_layout
+
+\begin_layout Plain Layout
+
+	ld ZH, W+
+\end_layout
+
+\begin_layout Plain Layout
+
+	ijmp
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ENTER:
+\end_layout
+
+\begin_layout Plain Layout
+
+	push IPl
+\end_layout
+
+\begin_layout Plain Layout
+
+	push IPh
+\end_layout
+
+\begin_layout Plain Layout
+
+	movw IP, W
+\end_layout
+
+\begin_layout Plain Layout
+
+	rjmp NEXT
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+EXIT:
+\end_layout
+
+\begin_layout Plain Layout
+
+	pop IPh
+\end_layout
+
+\begin_layout Plain Layout
+
+	pop IPl
+\end_layout
+
+\begin_layout Plain Layout
+
+	rjmp NEXT
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Проведемо аналіз даних процедур.
+\end_layout
+
+\begin_layout Пункт1
+Процедура NEXT
+\end_layout
+
+\begin_layout Standard
+Процедура NEXT відповідає за перехід до наступного слова у потоці адрес.
+ При своїй роботі вона завантажує поточну адресу у робочий регістр (W).
+ В робочому тепер знаходиться адреса поля коду слова.
+ Після цього відбувається отримання адреси виконавчого коду в ПЗП мікроконтролер
+а.
+ Записавши дану адресу в регістр Z, процедура здійснює непрямий перехід
+ в програмі.
+\end_layout
+
+\begin_layout Standard
+Таким чином, вдається виконати асемблерну процедуру.
+ 
+\end_layout
+
+\begin_layout Standard
+Після завершення машинного коду, програма повинна виконати черговий стрибок
+ на процедуру NEXT, щоб віртуальна машина змогла продовжити свою циркуляцію
+ по потоку адрес.
+\end_layout
+
+\begin_layout Standard
+При реалізації цих основних процедур постає питання вирішення проблеми розподіле
+ння регістрів.
+ В даній роботі дана проблема була вирішена наступним чином:
+\end_layout
+
+\begin_layout Itemize
+регістр X утримує вказівник на поточну адресу IP
+\end_layout
+
+\begin_layout Itemize
+регістр Y зберігає робочий регістр
+\end_layout
+
+\begin_layout Itemize
+регістр Z не використовується системно.
+ Дане рішення спрощує дизайн додаткових процедур, проте втрачається можливість
+ оптимізаційної техніки 
+\begin_inset Quotes fld
+\end_inset
+
+вершина стеку
+\begin_inset Quotes frd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Пункт1
+Процедура ENTER
+\end_layout
+
+\begin_layout Standard
+Процедура ENTER забезпечує коректний вхід і виконання високорівневого визначення
+ слова.
+ При роботі вона зберігає поточне значення вказівника поточної адреси IP
+ у стек повернень.
+ Після даного збереження вона завантажує вміст робочого регістра до вказівника
+ поточної адреси.
+ Дана дія основана на тому, що робочий регістр зберігає вказує на машинну
+ адресу тільки в одному випадку — при її зчитуванні у процедурі NEXT.
+ Увесь інший час є вказівником на наступну адресу.
+ Завдяки архітектурі слова, поле параметрів йде одразу після поля коду,
+ що означає — робочий регістр автоматично є вказівником на поле параметрів,
+ а отже його можна використовувати як вказівник на новий потік адрес.
+\end_layout
+
+\begin_layout Standard
+Процедура ENTER використовується для високорівневих визначень слів.
+ Саме адреса процедури ENTER знаходиться у полі коду для високорівневих
+ визначень слів.
+ Для порівняння можна привести два приклади слів: машинного і високорівневого.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+mem_AND:  .dw itc_AND     ; асемблерне визначення
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+itc_AND:
+\end_layout
+
+\begin_layout Plain Layout
+
+	rcall ds_POP_ZZ
+\end_layout
+
+\begin_layout Plain Layout
+
+	mov temp2L, ZZL
+\end_layout
+
+\begin_layout Plain Layout
+
+	mov temp2H, ZZH
+\end_layout
+
+\begin_layout Plain Layout
+
+	rcall ds_POP_ZZ
+\end_layout
+
+\begin_layout Plain Layout
+
+	and ZZL, temp2L
+\end_layout
+
+\begin_layout Plain Layout
+
+	and ZZH, temp2H 
+\end_layout
+
+\begin_layout Plain Layout
+
+	rcall ds_PUSH_ZZ
+\end_layout
+
+\begin_layout Plain Layout
+
+	rjmp NEXT
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Високорівневе визначення
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+mem_CELL:  .dw ENTER 
+\end_layout
+
+\begin_layout Plain Layout
+
+	.dw (mem_LIT - START_CODE)*2 + WORDS_START
+\end_layout
+
+\begin_layout Plain Layout
+
+	.dw 2
+\end_layout
+
+\begin_layout Plain Layout
+
+	.dw (mem_EXIT - START_CODE)*2 + WORDS_START 
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Дані приклади показуют типове розміщення адресного потоку для слів Форту.
+\end_layout
+
+\begin_layout Пункт1
+Процедура EXIT
+\end_layout
+
+\begin_layout Standard
+Процедура EXIT є напростішою з основних.
+ Вона виконує відновлення вказівника поточної адреси, по такому ж принципу,
+ що і асемблерна команда ret.
+ Дана процедура ніколи не вказується прямим посиланням, як наприклад, ENTER.
+ Натомість її адреса завжди компілюється через проміжний рівень непрямої
+ адресації.
+ Саме тому, для неї потрібне і асемблерне слово.
+ Останнє може бути безіменним.
+\end_layout
+
+\begin_layout Standard
+EXIT і ENTER працюють із стеком повернень і забезпечують ієрархічне виконання
+ потоку команд.
+ Дві інші важливі процедури працюють із стеком даних.
+\end_layout
+
+\begin_layout Пункт1
+Процедури ds_PUSH_ZZ і ds_POP_ZZ
+\end_layout
+
+\begin_layout Standard
+Процедури ds_PUSH_ZZ і ds_POP_ZZ забезпечують операції зі стеком даних для
+ додаткових процедур.
+ Від ефективності реалізації даних процедур залежить ефективність арифметичних
+ операцій.
+ Враховуючи, що арифметичні операції складають більшу частину коду програми,
+ часто використовується техніка 
+\begin_inset Quotes fld
+\end_inset
+
+вершина стеку
+\begin_inset Quotes frd
+\end_inset
+
+.
+ При даній техніці комірка, що знаходиться у вершині стеку, кешується в
+ регістри процесора.
+ 
+\end_layout
+
+\begin_layout Standard
+Дана реалізація побудована на простішому механізмі штучних операцій із стеком
+ даних і демонструє іншу властивість Форта — зберігання системних змінних
+ у ОЗП.
+ При кожному запиті до процедури відбувається зчитування комірки по адресі
+ в ОЗП і відповідний запис, що означає зсув вершини стеку даних.
+ У випадку ds_PUSH_ZZ зсув відбувається у сторону вищих адрес, у випадку
+ ds_POP_ZZ зсув відбувається у сторону менших адрес.
+\end_layout
+
+\begin_layout Подраздел
+Реалізація стеків і арифметика
+\end_layout
+
+\begin_layout Standard
+Всі арифметичні операції і багато логічних повинні використовувати акумулятор.
+ Є тільки одна 16-бітна операція INC DPTR.
+ Апаратний стек повинен використовувати 128-байтний накристальний файловий
+ регістр.
+ 
+\end_layout
+
+\begin_layout Standard
+Деякі AVR Форти використовують 16-бітну модель, але вони дуже неквапливі.
+ Давайте зробимо деякі компроміси і зробимо більш швидкий Форт для AVR процесора.
+\end_layout
+
+\begin_layout Standard
+У нас є тільки один адресний регістр.
+ Тому давайте використовувати в якості лічильника команд рідної регістр
+ IP 8051 процесора, і виберемо подпрограммний ШК.
+ Якщо компілятор використовує двухбайтное ACALL замість трехбайтних LCALL-ів
+ скрізь, де це можливо, більшість подпрограммного ШК буде займати так само
+ мало місця, як і у випадку з прямим і непрямим ШК.
+\end_layout
+
+\begin_layout Standard
+Підпрограмний ШК припускає, що в якості покажчика вершини стека повернень
+ використовується апаратний покажчик стека.
+ У AVR осередки простору в накрістальном регістровому файлі, не достатньо
+ місця для зберігання стеків в багатозадачному системі.
+ Тому ви можете: a) обмежитися однозадачной Форт-системою; b) писати таким
+ чином всі Форт-слова, що під час виклику вони зберігають адресу повернення
+ в програмний стек в ОЗУ; або c) робити перемикання завдань із збереженням
+ стека повернень у зовнішнє ОЗУ.
+\end_layout
+
+\begin_layout Standard
+Варіант b повільний.
+ Перенесення 128 байт при кожному перемиканні задач буде швидше пересилання
+ двох байт для кожного Форт-слова.
+ Тому виберемо варіант "a", залишивши відкритими двері для варіанту "c"
+ на майбутнє.
+\end_layout
+
+\begin_layout Standard
+Один єдиний дійсно адресний регістр DPTR буде використовуватися для численних
+ потреб.
+ Він буде багатоцільовим робочим регістром W.
+\end_layout
+
+\begin_layout Standard
+По правді, існує два інших регістра, що дозволяють адресувати зовнішню пам'ять:
+ R0 і R1.
+ Вони працюють тільки з 8бітнимі адресами, старші 8 біт явно виводяться
+ в port 2.
+ Але це дозволене обмеження для стеків, тепер вони будуть обмежені простором
+ в 256 байт.
+ Давайте будемо використовувати R0 як покажчик стека даних (PSP).
+\end_layout
+
+\begin_layout Standard
+Це 256-байтноє простір може бути використано під область клієнтів.
+ Це робить P2 (другий порт) другим байтом UP, і, подібно 6809, молодший
+ байт буде завжди нулем.
+\end_layout
+
+\begin_layout Подраздел
+Забезпечення термінального зв’язку
+\end_layout
+
+\begin_layout Standard
+Термінальний зв’язок утворюється за рахунок мікросхеми COM-USB перехідника.
+ Тобто, використовуючи УАПП, вбудований у мікроконтролер, можна по кабелю
+ USB передавати дані на ПК.
+\end_layout
+
+\begin_layout Standard
+При реалізації передачі даних по УАПП застосовано стандартні техніки зчитування/
+запису послідовних даних.
+ Це функції:
+\end_layout
+
+\begin_layout Enumerate
+USART_vInit — ініціалізація приймача і передавача
+\end_layout
+
+\begin_layout Enumerate
+USART_Receive — очікування байту з вхідного каналу
+\end_layout
+
+\begin_layout Enumerate
+USART_Transmit — пересилка байту у вихідний канал
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Загальна схема вибрана простою, без переривань, для простішого відлагодження
+ механізму.
+\end_layout
+
+\begin_layout Standard
+Переривання готовності працює дещо складніша.
+ Суть в тому, що робота АЦП у нас йде за таким алгоритмом: запускаємо одиночне
+ АЦП перетворення і чекаємо переривання готовності АЦП.
+ У перериванні забираємо дані.
+ Зберігаємо дані.
+ Перемикаємо канал з якого ми знімали показання.
+ Запускаємо наступне перетворення (вже для іншого каналу) Виходимо з переривання
+ і чекаємо следюущего переривання.
+ 
+\end_layout
+
+\begin_layout Standard
+Даний алгоритм робить все автоматично, в режимі кінечного автомата.
+ У результаті у нас в пам'яті, в масиві ADCCH, завжди лежать 8 свіжих значень,
+ знятих з 8ми каналів АЦП.
+ Залишається їх тільки рахувати і використовувати.
+ При цьому головний цикл крутиться по своїх справах і не париться, знаючи,
+ що свіжі значення завжди його чекають.
+ У самому перериванні активно використовується робота з масками.
+ Для того, щоб змінити номер каналу.
+ 
+\end_layout
+
+\begin_layout Standard
+Номер каналу лежить в останніх трьох бітах регістру ADMUX і може мати значення
+ від 0 до 7 (000 і 111 соотвествтенно).
+ І нам треба в кожному виклику збільшувати значення каналу, перебираючи
+ їх по черзі.
+ Просто так ікрементіровать ADMUX не можна, тому що крім номера каналу там
+ лежать ще й бити управління АЦП, вирівнювання і опорного напруги — вони
+ можуть збитися.
+\end_layout
+
+\begin_layout Подраздел
+Узагальнення інформації про Форт
+\end_layout
+
+\begin_layout Standard
+Те, що я уже зробив, це ще не Форт у буквальному значенні цього слова, проте
+ це Форт у значенні ідеології.
+ Максимальна зручність при мінімально можливому розмірі, макро-надбудова
+ над асемблером з можливостями мов високого рівня, наявність діалогового
+ режиму, абстрагованість від системи (у прикладах я показував як можна замінити
+ виклик CR двома EMIT-ами, проте тому і існує слово CR, щоб абстрагуватись
+ від способу переведення на новий рядок у різних комп’ютерах), словник та
+ слова – ось що таке Форт-ідеологія, ось що є суттю.
+ 
+\end_layout
+
+\begin_layout Standard
+Форт – це не мова програмування, це спосіб мислення.
+ Як видно з попереднього твердження, стеки даних не є необхідним, щоб мова
+ називалась Форт-подібною.
+ В історії існують приклади Форт-систем без стеку даних.
+ Просто, як правило стек реалізується через те, що він є найбільш зручним
+ при найменших затратах на його організацію.
+ 
+\end_layout
+
+\begin_layout Standard
+Історично так склалось, що Форт-слова повинні писатись капсом, проте це
+ зовсім не означає, що я не можу писати слова маленькими буквами.
+ Від цього мій Форт не перестане бути Фортом.
+ 
+\end_layout
+
+\begin_layout Standard
+У Форті дуже мало внутрішніх перевірок на коректність роботи програми та
+ коректність дій користувача, а ті які є можна завжди можна обійти.
+ Це наслідок того, що Форт – всього лиш надбудова над асемблером і як в
+ асемблері, так і в Форті дозволено робити все, що заманеться.
+ Мабуть через це Форт досі вважається “метрвою”, нежиттєздатною мовою.
+ 
+\end_layout
+
+\begin_layout Standard
+В світі великих технологій, швидкого та розприділеного між багатьма людьми
+ програмування, в світі мільйонів вірусів Форт – як біла ворона.
+ Хоча насправді, доки живуть хакери, доти буде жити й Форт.
+ GRUB L.2, OpenBIOS, PostScript – приклади того, що Форт живіший всіх живих
+ і ніколи не помре як ідея.
+ Форт-ідеологію не можливо збагнути, доки сам не напишеш хоча б частину
+ свого власного Форт-інтерпретатора.
+\end_layout
+
+\begin_layout Standard
+Дуже часто у Форті використовуються конструкції, які вганяють у ступор звичайних
+ програмістів.
+ По-перше, стекове мислення, по-друге, – коментарії в дужках, по-третє,
+ – використання символів як ключових слів.
+ Ось неповний список стандартних односимвольних слів: 
+\end_layout
+
+\begin_layout Itemize
+.
+ (крапка) – вивести число в вершині стеку на екран 
+\end_layout
+
+\begin_layout Itemize
+( (дужка) – означає початок коментаря 
+\end_layout
+
+\begin_layout Itemize
+@ (собачка) – зчитати число в пам’яті 
+\end_layout
+
+\begin_layout Itemize
+! (знак оклику) – записати число в пам’ять 
+\end_layout
+
+\begin_layout Itemize
+# (шарпик) – забрати у числа останню цифру 
+\end_layout
+
+\begin_layout Itemize
+[ (кв.
+ дужка) - перейти у режим інтерпретації 
+\end_layout
+
+\begin_layout Itemize
+‘ (апостроф) – знайти слово в словнику 
+\end_layout
+
+\begin_layout Itemize
+
+\backslash
+ (зворотній слеш) – однорядковий коментар 
+\end_layout
+
+\begin_layout Itemize
+: (двокрапка) – створити заголовок для слова і перейти у режим компіляції
+ 
+\end_layout
+
+\begin_layout Itemize
+, (кома) – записати число зі стека по адресі HERE і пересунути вказівник
+ DP на CELL байт вперед 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Стандарти пишуться на основі досвіду, тому я також буду намагатись слідувати
+ стандарту.
+ Проте, стандарту потрібно дотримуватись тоді, коли потрібна якась взаємодія
+ між програмами, написаними різними людьми.
+ 
+\end_layout
+
+\begin_layout Standard
+Форт має такі переваги над іншими мовами: стек даних, можливість зміни роботи
+ інтерпретатора на льоту, можливість створення нових конструкцій мови, мінімальн
+о можливий генерований код, відсутність обмежень, простота відладки програми,
+ простота синтаксису і ще багато-багато інших переваг, типу реалізація інтерпрет
+атора Форта на Форт займає всього 5 рядків, зручний інтерактивний режим.
+ 
+\end_layout
+
+\begin_layout Standard
+У Форті відсутня типізація, і це є принципом, а не недоліком.
+ Якщо програмісту потрібен якийсь тип, будь-ласка, реалізовуй сам.
+ Благо Форт дозволяє це робити.
+ Нехай вас не лякає, що арифметика Форта цілочисленна.
+ При сильній потребі реалізувати дробові числа можливо і навіть кількома
+ способами.
+\end_layout
+
+\begin_layout Standard
+Наведений приклад заодно вказує на унікальну особливість Форту: відсутність
+ списку параметрів в дужках і можливість програмувати на рідній мові.
+ 
+\end_layout
+
+\begin_layout Standard
+Використання словникових конструкцій рідної мови дозволяє зробити програму
+ зрозумілою, що підвищує її надійність.
+ «Зворотний польський запис» арифметичних виразів і наявність декількох
+ стеків.
+ Двоїста природа компілятора Форту.
+ Не можна стверджувати однозначно, чи є Форт компілятором або інтерпретатором.
+ 
+\end_layout
+
+\begin_layout Standard
+Практично завжди його можна використовувати в двох режимах, за винятком
+ рідкісних випадків на кшталт «цільової компіляції» (трансляції в машинний
+ код програми для системи з іншою архітектурою).
+ Відсутність системи типів.
+ Подібно мов асемблера, у Форті немає вбудованої системи типів.
+ Немає можливості дізнатися, що лежить на вершині стека - число зі знаком,
+ число без знака, покажчик на рядок, символ, або два числа, що розглядаються
+ як одне довге число.
+ 
+\end_layout
+
+\begin_layout Standard
+Контроль типів покладається на програміста.
+ При цьому використовуються спеціальні набори слів (наприклад, запис і читання
+ елементів пам'яті виробляють словами! І @, а символів - словами C! і C
+ @), деякі сутності виносяться в спеціальні стеки (наприклад, стек чисел
+ з плаваючою комою, відповідно до стандарту ANSI FORTH 94; він може бути,
+ а може і не бути, реалізований за допомогою основного стека).
+ 
+\end_layout
+
+\begin_layout Standard
+Свобода, що надається програмісту, вимагає сильного самоконтролю.
+ Вхідний поріг для програмування на Форте нижче, ніж у мов типу C++, але
+ вимагає звикання і розуміння не тільки можливостей і особливостей синтаксису
+ Форту, але, також, розуміння філософії, що лежить в його основі.
+ Форт не підтримує жодну парадигму програмування і підтримує їх всі одночасно.
+ 
+\end_layout
+
+\begin_layout Standard
+Написати набір слів для організації ООП у програмі на Форте (а їх може бути
+ одночасно декілька і вони будуть відмінно уживатися разом) набагато простіше,
+ ніж вирішити, які можливості від цього набору слів потрібні.
+ Розбивка програми на безліч дрібних слів дозволяє легко і швидко перевіряти
+ їх окремо, передаючи їм потрібні набори вхідних параметрів і контролюючи
+ те, що залишається на стеку.
+ Фактично, це означає, що для тестування якогось компонента програми можна
+ не завантажувати всі залежні компоненти цілком.
+ Форт не приховує помилки.
+ Цей факт встановлено досвідченим шляхом.
+ 
+\end_layout
+
+\begin_layout Standard
+«Відкладені» помилки у програмі на Форте — велика рідкість.
+ Помилки, які, у звичайних мовах програмування, ховаються стандартним перетворен
+ням типів (наприклад, int в char в C++ (хоча більшість сучасних компіляторів
+ видасть, звичайно, попередження) або рядка в число в якому-небудь скриптовій
+ мовою), практично миттєво, при наступному ж тестовий запуск, «обрушують»
+ програму.
+ Більшість реалізацій форту дозволяють зробити декомпіляцію програми.
+ Отриманий текст мало відрізняється від початкового.
+ Форт дозволяє реалізувати будь-яку технологію програмування, доступну в
+ інших мовах і системах.
+ У ньому також припустимі прийоми, заборонені в інших мовах (наприклад —
+ самомодіфікації коду).
+ Усунути негативні наслідки цих прийомів шляхом створення правильного лексикону,
+ стимулюючого грамотну методику їх використання також покладено на програміста.
+ У інтерпретаторі легко реалізувати всі перевірки на межі діапазону адрес,
+ а це при створенні ОС дозволяє відмовитися від захищеного режиму процесора.
+ Виходить суттєвий виграш у швидкості роботи.
+ 
+\end_layout
+
+\begin_layout Standard
+Розмір коду Форту для 16-розрядних систем, при грамотному написанні програми,
+ іноді в 10-20 разів менше коду, скомпільованого з програми на Сі.
+ Для 32-розрядних систем цей розрив ще більше.
+ В операційних системах загальний виграш може становити вже сотні, а то
+ й тисячі разів.
+ Причина дуже проста — готова завдання на Форте має розмір кілька байт,
+ всі допоміжні підпрограми реалізовані у вигляді визначень, які доступні
+ всім.
+ Система на Форте вміститься в процесор, у який інші системи влізти в принципі
+ не здатні.
+ Синхронізація процесів та потоків в багатозадачних системах, перемикання
+ контексту, реалізація доступу до обмежених ресурсів — найскладніші проблеми
+ при написанні ОС.
+ Для підтримки цих можливостей навіть створюються спеціальні команди в мікропроц
+есорах.
+ Для інтерпретатора це взагалі не проблема, оскільки він емулює будь-який
+ процесор і будь-яку необхідну команду.
+ Можливо, що насправді найбільше розвитку Форту перешкоджає «важка спадщина»,
+ що прийшов з машин з низькими можливостями, для яких він спочатку створювався.
+ 
+\end_layout
+
+\begin_layout Standard
+При програмуванні з активним використанням арифметики з плаваючою точкою,
+ цю норму стандарту традиційно ігнорують.
+ Аналогічна норма існує відносно стека потоку керування.
+ Тут усе не так просто, так як часто це саме так і є — в процесі компіляції
+ стек використовується самим компілятором.
+ 
+\end_layout
+
+\begin_layout Standard
+В абсолютній більшості випадків ніякого впливу на програму це не робить,
+ але про саму особливість треба пам'ятати.
+ Наприклад, якщо ви хочете в процесі компіляції обчислити якесь число, за
+ межами початку визначення, а потім вставити його в слово як константу,
+ то для цього доведеться використовувати який-небудь обхідний шлях.
+ 
+\end_layout
+
+\begin_layout Standard
+Визначення багатьох слів у стандарті занадто низькорівневі.
+ Наприклад, слово 2* виробляє не множення на два, як випливає з його назви,
+ а «зміщує число на один біт до старшого двійковому розряду, заповнюючи
+ молодший біт нулем».
+ Звичайно, на більшості сучасних машин - це одне і те ж, але сам факт використан
+ня особливостей конкретної архітектури насторожує.
+ (Існують також більш очевидні стандартні слова для зрушення бітів — LSHIFT
+ і RSHIFT.)
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+newpage
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Раздел
+Інструкція користувача
+\end_layout
+
+\begin_layout Подраздел
+Необхідне програмне забезпечення
+\end_layout
+
+\begin_layout Пункт1
+Операційна система Linux
+\end_layout
+
+\begin_layout Standard
+Linux — загальна назва UNIX-подібних операційних систем на основі однойменного
+ ядра.
+ Це один із найвидатніших прикладів розробки з відкритим кодом та вільного
+ програмного забезпечення; на відміну від пропрієтарних операційних систем,
+ на кшталт Microsoft Windows та MacOS X, її вихідні коди доступні усім для
+ використання, модифікації та розповсюдження абсолютно вільно (в т.ч.
+ безкоштовно).
+\end_layout
+
+\begin_layout Standard
+Про TCP/IP, одному з найбільше інтенсивно використовуваних стеков протоколів.
+ Книга починається з елементарного введення в теорію комп'ютерних мереж
+ і межсетевого взаємодії, потім іде виклад мережних моделей OSI і TCP/IP,
+ далі випливають опису кожного рівня й кожного протоколу стека TCP/IP, супроводж
+увані прикладами з реалізації цієї моделі в Linux.
+ Опис кожного нового протоколу й кожного нового поняття йде по тій же схемі
+ від простого до складного, що й увесь виклад, тому книга вдало поєднує
+ в собі доступність поступового введення з обґрунтованістю монографії.
+ У той же час, достаток прикладів не дає читачеві згубитися в нетрях абстракцій,
+ створюючи відчуття реальності, недолік якої часто утрудняє засвоєння складного
+ матеріалу.
+ Авторові вдалося сполучити повноту викладу з виразністю, що суттєво розширює
+ коло читачів.
+ Там, де подальша деталізація загрожує вийти за розумні межі, приводяться
+ посилання на відповідну літературу й мережі.
+\end_layout
+
+\begin_layout Standard
+Як у кожній бочці меду є ложка дьогтю, так і кожна система має свого адміністрат
+ора.
+ А адміністрування системи - це дуже важлива і іноді пожирає силу-силенну
+ часу робота, навіть якщо ви єдиний користувач системи.
+ 
+\end_layout
+
+\begin_layout Standard
+Ми постараємося обговорити тут найбільш важливі речі, пов'язані з адмініструванн
+ям, про який ви повинні знати при використанні Linux, щоб не відчували незручнос
+тей при роботі з ОС.
+ Щоб бути не надто балакучими і приємними співрозмовниками, ми і раніше
+ розглядали тільки основні риси, пропускаючи багато важливі деталі.
+ Це допоможе вам краще зрозуміти як там все відбувається, і як там все взаємодіє.
+ У крайньому випадку, варто все це переглянути, щоб знати що у книзі міститься
+ і якої допомоги вам слід від неї очікувати.
+ 
+\end_layout
+
+\begin_layout Standard
+UNIX розрізняє різних користувачів, так що те, що вони можуть зробити один
+ одному і системі, регулюється (наприклад, не хочеться, щоб хтось читав
+ чужі любовні листи).
+ Кожен користувач отримує account (реєструється в системі), що включає ім'я
+ користувача, домашній каталог і т.д.
+ На додаток до реєстрації реальних людей, реєструються (для них також відкриваєт
+ься рахунок кілька спеціальних користувачів, що мають привілеї.
+ Найбільш "важливий" навіть серед них користувач — root (корінь).
+ 
+\end_layout
+
+\begin_layout Standard
+Звичайні користувачі в загальному випадку обмежені так, що вони не можуть
+ заподіяти шкоду кому-небудь іншому в системі (включаючи саму систему),
+ крім самих себе.
+ Права доступу до файлів в системі організовані таким чином, що простий
+ користувач не може видалити або змінити файл, файл у каталогах, які користувачі
+ використовують спільно (такі як /bin і /usr/bin).
+ Більшість користувачів також захищають свої власні файли так, що не можуть
+ їх змінити, а іноді і взагалі дістатися до них.
+ 
+\end_layout
+
+\begin_layout Standard
+Всі ці обмеження не поширюються на користувача root.
+ Користувач root може читати, модифікувати або видаляти будь-який файл системи,
+ змінювати його права доступу або змінювати його власника.
+ Він (root) може також виконувати спеціальні (привілейовані) програми, такі
+ як розбиття диска на розділи або створення файлової системи.
+ Основна ідея полягає в тому, що той, хто виконує реєстрацію користувачів,
+ повинен, якщо це необхідно, мати можливість виконувати роботи, які не можуть
+ бути виконані звичайним рядовим користувачем.
+ Оскільки root може робити все, що завгодно, йому легко зробити якусь помилку,
+ що приводить до катастрофічних наслідків.
+ 
+\end_layout
+
+\begin_layout Standard
+Наприклад, якщо ви як звичайний користувач випадково спробуєте видалити
+ файл в /etc, система не дозволить вам це зробити.
+ Але, якщо ви увійшли як root, система навіть не пискне, виконуючи все,
+ що накажете.
+ Легко знищити систему, перебуваючи в системі як root.
+\end_layout
+
+\begin_layout Standard
+Посидіти на власних долоньках, перш ніж натиснути return для виконання команди,
+ яка може бути причиною катастрофи.
+ Наприклад, якщо ви збираєтеся очистити каталог, перед натисканням return
+ перечитайте всю команду і переконайтеся, що вона написана правильно.
+ Чи не звикайте використовувати root.
+ Чим більш комфортно вам буде в ролі root, тим більше ви будете плутати
+ ваші привілеї з привілеями нормального користувача.
+ Наприклад, ви можете подумати, що ви зараз перебуваєте в системі як larry,
+ хоча насправді будете нестримним root.
+ Використовуйте відрізняється підказку для root.
+ Для цього слід внести зміни до root-івський.
+ Bashrc або.
+ Login файл для того, щоб зробити підказку для root відмінною від інших.
+ Наприклад, багато хто використовує символ ``$'' в підказках звичайних користува
+чів і залишають символ ``#'' для підказки root.
+ Заходьте під ім'ям root тільки тоді, коли це абсолютно необхідно.
+ І, як тільки ви закінчите роботу root-а, вийдіть (виведіть root-а з системи).
+ Чим менше використовуєте root, тим менше нашкодите системі.
+ Зрозуміло, є плем'я хакерів, які використовують root практично завжди і
+ скрізь.
+ Але кожен з них колись по дурості знищив хоча б (у кращому випадку) одну
+ систему.
+ Є загальне правило: поки ви не познайомилися з необмеженими можливостями
+ root, і не звикли до відсутності обмежень, входьте під root в крайньому
+ випадку.
+ 
+\end_layout
+
+\begin_layout Standard
+Давайте по-іншому, якщо ви представите використання root як носіння спеціального
+ чарівної шапки, яка дає вам могутність, так що ви можете помахом руки зруйнуват
+и цілі міста, то доречна думка, що треба дуже стежити за своїми руками.
+ А оскільки така міць небезпечна (та й рук незручно), краще без великої
+ потреби не надягати чарівну шапку, навіть якщо в шапці у вас підвищується
+ самоповага.
+ 
+\end_layout
+
+\begin_layout Standard
+З приходом відчуття влади приходить бажання шкодити.
+ Це темна сторона адміністрування в UNIX, але всякий через це колись має
+ пройти.
+ Більшість користувачів UNIX ніколи не отримають можливість випробувати
+ це на університетських і виробничих системах UNIX.
+ Тільки високооплачувані та високоосвічені системні адміністратори можуть
+ входить в систему під іменем root.
+ Дійсно, у багатьох таких закладах пароль root - це строго охороняється
+ секрет.
+ Це священна корова фірми.
+ Багато робиться спроб пролізти під ім'ям root в систему; вона представляється
+ мудрою і страхітливою силою, піддаються тільки тим, хто знає заклинання.
+ 
+\end_layout
+
+\begin_layout Standard
+Така позиція по відношенню до root дуже легко призводить до небезпек і спокусам.
+ Оскільки root настільки одурманюючих штука, то коли користувач дориваються
+ до можливості увійти під root, простежується початок використання звалилися
+ привілеїв в плані шкідництва.
+ Я знав таких "системних адміністраторів", які читали без дозволу пошту
+ інших користувачів і взагалі вели себе як діти, яким дали таку потужну
+ кльову "іграшку".
+ 
+\end_layout
+
+\begin_layout Standard
+Оскільки root має в системі такі привілеї, потрібен певний рівень зрілості
+ і самоконтролю, щоб використовувати цей account (цей привілейований "рахунок"),
+ як це було задумано - для експлуатації системи.
+ Існує негласний закон честі у відносинах адміністратора з користувачами.
+ Як ви будете почуватися, якщо системний адміністратор читає ваші листи
+ і переглядає ваші файли.
+ До цих пір немає достатньо серйозної юридичної основи для недоторканності
+ особистої інформації в багатокористувацьких комп'ютерних системах.
+ У системах сімейства UNIX користувач root має можливість долати всі штатні
+ механізми захисту системи.
+ Важливо, щоб у адміністратора були довірчі відносини з користувачами системи.
+ Неможливо переоцінити важливість цього.
+ 
+\end_layout
+
+\begin_layout Standard
+Питання безпеки були домислені 
+\begin_inset Quotes fld
+\end_inset
+
+в догонку
+\begin_inset Quotes frd
+\end_inset
+
+ — початково система створювалася в неформальній атмосфері, коли всі втручалися
+ в роботу один одного.
+ Завдяки цьому, навіть незважаючи на заходи безпеки, у нормальної користувача
+ існують можливості заподіяти системі шкоду.
+ 
+\end_layout
+
+\begin_layout Standard
+Системний адміністратор може вибрати дві тактики взаємодії з користувачами.
+ Це може бути параноїдна тактика і тактика довіри.
+ Системний адміністратор з параноєю звичайно своїми діями завдає більше
+ шкоди, ніж запобігає.
+ Ніколи не списуй на шкідливість те, що можна списати на незрозумілість.
+ Погляньте з іншого боку, більшість користувачів не мають можливостей і
+ знань, щоб заподіяти реальну шкоду системі.
+ Девяносто відсотків того, що робить користувач, завдаючи шкоди системі
+ (наприклад, забиваючи власний розділ величезними файлами або виконуючи
+ відразу кілька екземплярів величезної програми), він робить просто не підозрююч
+и, що він комусь щось створює проблеми.
+ Мені доводилося стикатися з користувачами, які були джерелами величезних
+ неприємностей, але вони діяли по простоті душевній, а не зі зла.
+ 
+\end_layout
+
+\begin_layout Standard
+Коли ви маєте справу з користувачами, які небезпечні потенційно, не накидають
+ на них із звинуваченнями.
+ Старе правило все ще не скасували.
+ Краще всього поговорити з користувачем, попитати про його проблеми, замість
+ того, щоб йти на конфронтацію.
+ Найгірше, це намагатися відповідати йому 
+\begin_inset Quotes fld
+\end_inset
+
+зустрічним
+\begin_inset Quotes frd
+\end_inset
+
+.
+ Це створить навколо вас - системного адміністратора - багато підозр, поставить
+ під сумнів вашу здатність коректно підтримку системи.
+ Якщо користувач вирішить, що ви не вірите йому або навіть не любите, він
+ може звинуватити вас у тому, що ви видаляєте його файли і взагалі підглядаєте.
+ Навряд чи ви хочете опинитися в такій ситуації.
+ 
+\end_layout
+
+\begin_layout Standard
+Якщо ви створили керівництво для користувачів системи, переконайтеся, що
+ причини введення тих чи інших правил їм зрозумілі.
+ Якщо ви цього не зробите, користувачі творчо підійдуть до того, як обходити
+ ці правила.
+ може бути і не усвідомлюючи, що вони їх дійсно обходять.
+ 
+\end_layout
+
+\begin_layout Standard
+Ми не можемо до останньої деталі розписати вам, як експлуатувати систему.
+ Велика частина філософії залежить від того, як ви використовуєте систему.
+ Якщо у вас багато користувачів, то це сильно відрізняється від того, коли
+ їх мало, або взагалі ви один.
+ Але при будь-якому розкладі дуже корисно замислитись, що в даній конкретній
+ системі дійсно означають слова 
+\begin_inset Quotes fld
+\end_inset
+
+системний адміністратор
+\begin_inset Quotes frd
+\end_inset
+
+ (або 
+\begin_inset Quotes fld
+\end_inset
+
+адміністратор системи
+\begin_inset Quotes frd
+\end_inset
+
+).
+ 
+\end_layout
+
+\begin_layout Standard
+Посада адміністратора системи не робить вас крутим юніксістом.
+ На світі багато системних адміністраторів, які мало що знають про UNIX.
+ Схоже, що існує багато 
+\begin_inset Quotes fld
+\end_inset
+
+нормальних
+\begin_inset Quotes frd
+\end_inset
+
+ користувачів, які, знають про UNIX більше будь-якого системного адміністратора.
+ Перебування на посаді адміністратора не дає вам права використовувати загрози
+ в адресу користувачів.
+ Саме тому, що система дає вам привілей влаштувати з файлів користувача
+ все, що завгодно, ви не маєте ніякого права це робити.
+ 
+\end_layout
+
+\begin_layout Standard
+Нарешті, бути системним адміністратором, це казна-що.
+ При цьому не має значення, опікуєтеся ви маленький триста вісімдесят другому
+ або суперкомп'ютер Cray.
+ Знання заповітного пароля root не принесе вам грошей та слави, воно допоможе
+ супроводжувати систему і підтримувати її працездатність.
+\end_layout
+
+\begin_layout Пункт1
+Асемблер avra
+\end_layout
+
+\begin_layout Standard
+Асемблер avra є основним інструментом при розробці програм для AVR мікроконтроле
+рів на Лінукс.
+\end_layout
+
+\begin_layout Standard
+У простому випадку асемблер переводить одне речення початкової програми
+ в один об'єкт (команду, константу) модуля завантаження (т.
+ з.
+ трансляція «один в один»).
+ При цьому взаємне розташування об'єктів в модулі завантаження і, зрештою,
+ в пам'яті машини визначається порядком пропозицій в початковій програмі
+ на автокоді і повністю залежить від програміста.
+ Асемблер виконує і допоміжні функції, такі, як підготовка до друку документів
+ необхідної форми, реєстрація зв'язків даної програми з іншими програмами
+ і т.
+ д.
+ Для цієї мети в автокодах передбачаються команди асемблера, які не породжують
+ об'єктів в робочій програмі і призначені тільки для вказівки допоміжних
+ дій асемблера.
+ 
+\end_layout
+
+\begin_layout Standard
+Трансляція зазвичай вимагає двох переглядів початкової програми: при першому
+ перегляді здійснюється розподіл пам'яті і надання значень символічним іменам;
+ при другому — формується робоча програма у вигляді модуля завантаження.
+ В процесі трансляції асемблер проводить повний синтаксичний контроль початкової
+ програми (див.
+ синтаксичний аналіз програм), забезпечуючи при цьому достатньо точну діагностик
+у помилок за місцем і характером.
+ 
+\end_layout
+
+\begin_layout Standard
+Розширення можливостей автокодів досягається за рахунок використання макрокоманд
+, що будуються за правилами, близькими до правил написання команд автокоду,
+ але що описують складніші функції, для реалізації яких потрібна група звичайних
+ команд.
+ В цьому випадку перед трансляцією проводиться заміна макрокоманд макророзширенн
+ями — послідовностями команд на базовій мові відповідно до макроозначень.
+ У останніх задається прототип макрокоманди із структурою списку параметрів
+ і процедура генерування макророзширення.
+ 
+\end_layout
+
+\begin_layout Standard
+Транслятор, що виконує функції макрогенератора і асемблера, називається
+ макроасемблером.
+ При трансляції з мов високого рівня асемблер нерідко використовується для
+ виконання завершальної фази трансляції.
+\end_layout
+
+\begin_layout Пункт1
+Скриптовий інтерпретатор Python
+\end_layout
+
+\begin_layout Standard
+Python — інтерпретована об'єктно-орієнтована мова програмування високого
+ рівня з динамічною семантикою.
+ Структури даних високого рівня разом із динамічною семантикою та динамічним
+ зв'язуванням роблять її привабливою для швидкої розробки програм, а також
+ як засіб поєднання існуючих компонент.
+ Python підтримує модулі та пакети модулів, що сприяє модульності та повторному
+ використанню коду.
+ Інтерпретатор Python та стандартні бібліотеки доступні як у скомпільованій
+ так і у вихідній формі на всіх основних платформах.
+ В мові програмування Python підтримується декілька парадигм програмування,
+ зокрема: об'єктно-орієнтована, процедурна, функціональна та аспектно-орієнтован
+а.
+\end_layout
+
+\begin_layout Standard
+Python підтримує динамічну типізацію, тобто, тип змінної визначається лише
+ під час виконання.
+ З базових типів слід зазначити підтримку цілих чисел довільної довжини
+ і комплексних чисел.
+ Python має багату бібліотеку для роботи з рядками, зокрема, кодованими
+ в юнікоді.
+ З колекцій Python підтримує кортежі (tuples), списки (масиви), словники
+ (асоціативні масиви) і від версії 2.4, множини.
+ Система класів підтримує множинне успадкування і метапрограмування.
+ Будь-який тип, включаючи базові, входить до системи класів, й за необхідності
+ можливе успадкування навіть від базових типів.
+\end_layout
+
+\begin_layout Standard
+Подібно Ліспу та Прологу в режимі відлагодження, інтерпретатор Python має
+ інтерактивний режим роботи, при якому введені з клавіатури оператори відразу
+ ж виконуються, а результат виводиться на екран.
+ Цей режим цікавий не тільки новачкам, але й досвідченим програмістам, які
+ можуть протестувати в інтерактивному режимі будь-яку ділянку коду, перш
+ ніж використовувати його в основній програмі, або просто використовувати
+ як калькулятор з великим набором функцій.
+\end_layout
+
+\begin_layout Standard
+Для роботи потрібна версія 3.
+ Основні зміни, внесені до версії 3.0:
+\end_layout
+
+\begin_layout Itemize
+Синтаксична можливість для анотації параметрів і результату функцій (наприклад,
+ для передачі інформації про тип або документування).
+ 
+\end_layout
+
+\begin_layout Itemize
+Повний перехід на unicode для рядків.
+ 
+\end_layout
+
+\begin_layout Itemize
+Введення нового типу «незмінні байти» і типу «змінюваний буфер».
+ Обидва необхідні для подання двійкових даних.
+ 
+\end_layout
+
+\begin_layout Itemize
+Нова підсистема вводу-виводу (модуль io), що має окремі вигляди для бінарних
+ і текстових даних.
+ 
+\end_layout
+
+\begin_layout Itemize
+Абстрактні класи, абстрактні методи.
+ Ієрархія типів для чисел.
+ 
+\end_layout
+
+\begin_layout Itemize
+Зміни print з вбудованого виразу у вбудовану функцію.
+ Це дозволить модулям робити зміни, підлаштовуючись під різне використання
+ функції, а також спростить код.
+ У Python 2.6 ця можливість активується введенням from __future__ import
+ print_function.
+ 
+\end_layout
+
+\begin_layout Itemize
+Переміщення reduce (але не map або filter) з вбудованого простору в модуль
+ functools (використання reduce істотно менш читабельне в порівнянні з циклом).
+ 
+\end_layout
+
+\begin_layout Itemize
+Видалення деяких застарілих можливостей, які підтримуються у гілці 2.x для
+ сумісності, зокрема: класи старого стилю, цілочисельний поділ з обрізанням
+ результату як поведінка за вмовчанням, рядкові винятки, неявний відносний
+ імпорт, оператор exec тощо 
+\end_layout
+
+\begin_layout Itemize
+Реорганізація стандартної бібліотеки.
+ 
+\end_layout
+
+\begin_layout Itemize
+Новий синтаксис для метаклассів.
+ 
+\end_layout
+
+\begin_layout Itemize
+Змінений синтаксис присвоєння.
+ Стало можливим, наприклад, надання (a, * rest, b) = range(5).
+ З іншого боку, формальні параметри функцій на зразок def foo (a, (b, c))
+ більше неприпустимі.
+\end_layout
+
+\begin_layout Подраздел
+Написання Форт-програм
+\end_layout
+
+\begin_layout Standard
+Для написанння Форт-програм можна використовувати будь-який текстовий редактор.
+\end_layout
+
+\begin_layout Standard
+Приклад коду Форт програми приведено у додатку А.
+ Зауважте, що використання скрипта на мові програмування Python для завантаження
+ програми — обов’язкове!
+\end_layout
+
+\begin_layout Подраздел
+Користування макропрепроцесором
+\end_layout
+
+\begin_layout Standard
+Макропрепроцесор виконує роль метапрограмного підходу до програмування,
+ а саме генерацію коду.
+ При цьому підході код програми не пишеться вручну, а створюється автоматично
+ програмою-генератором на основі іншої, більш простої програми.
+ Такий підхід набуває сенсу, якщо при програмуванні виробляються різні додаткові
+ правила (більш високорівневі парадигми, виконання вимог зовнішніх бібліотек,
+ стереотипні методи реалізації певних функцій та ін.) При цьому частина коду
+ втрачає змістовний сенс і стає лише механічним виконанням правил.
+ Коли ця частина стає значною, виникає думка задавати вручну лише змістовну
+ частину, а решту додавати автоматично.
+ Це і робить генератор.
+ 
+\end_layout
+
+\begin_layout Standard
+Реалізується двома основними методами: шаблони (найбільш відомі випадки
+ застосування — препроцесор С та шаблони в C++) вирішують завдання, якщо
+ дотримання «правил» зводиться до вставки в програму повторюваних (або майже
+ повторюваних) шматків коду.
+ Крім цього, мають ще ряд переваг: наприклад, допомагають повторному використанн
+ю.
+ 
+\end_layout
+
+\begin_layout Standard
+Зовнішні засоби (наприклад генератори синтаксичних і лексичних аналізаторів
+ lex, yacc, bison) застосовуються у випадках, якщо простих засобів на зразок
+ шаблонів недостатньо.
+ Мова генератора складається так, щоб автоматично або з мінімальними зусиллями
+ з боку програміста реалізовувати правила парадигми або необхідні спеціальні
+ функції.
+ Фактично, це — більш високорівнева мова програмування, а генератор — не
+ що інше, як транслятор.
+ Генератори пишуться, як правило, для створення спеціалізованих програм,
+ в яких дуже значна частина стереотипна, або для реалізації складних парадигм.
+\end_layout
+
+\begin_layout Standard
+Макропрепроцесор призначений для пришвидшення процесу написання програми
+ і створення локальних програмних конструкцій для зручного представлення
+ програмних абстракцій.
+ Макропрепроцесор потрібно використовувати у наступний випадах:
+\end_layout
+
+\begin_layout Itemize
+усунення дублювання у простих випадках
+\end_layout
+
+\begin_layout Itemize
+необхідність нової псевдокоманди для процесора
+\end_layout
+
+\begin_layout Itemize
+необхідність генерації асемблерного коду
+\end_layout
+
+\begin_layout Itemize
+потрібен аналіз глобальних декларативних визначень і відповідна поведінка
+ кодогенератора
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Для забезпечення даних властивостей мова асемблера розширена синтаксисом,
+ зрозумілим макропрепроцесором.
+ Код макропрепроцесора приведено у Додатку Б.
+\end_layout
+
+\begin_layout Пункт1
+Перехід у скриптовий режим
+\end_layout
+
+\begin_layout Standard
+Перехід від мови асемблера до мови Python відбувається за рахунок спеціального
+ коментара — 
+\begin_inset Quotes fld
+\end_inset
+
+;>python
+\begin_inset Quotes frd
+\end_inset
+
+, вихід з мови Python до асемблера відбувається за рахунок спеціального
+ коментара — 
+\begin_inset Quotes fld
+\end_inset
+
+;>endpy
+\begin_inset Quotes frd
+\end_inset
+
+.
+ Рядок з спеціальним коментарем ігнорується і асемблером, і Python.
+ Приклад наведено у лістингу:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+mem_LIT: .dw itc_LIT
+\end_layout
+
+\begin_layout Plain Layout
+
+mem_ENTER: .dw ENTER
+\end_layout
+
+\begin_layout Plain Layout
+
+mem_EXIT: .dw EXIT
+\end_layout
+
+\begin_layout Plain Layout
+
+;>python 
+\end_layout
+
+\begin_layout Plain Layout
+
+addCompiledWord("LIT", "mem_LIT")
+\end_layout
+
+\begin_layout Plain Layout
+
+addCompiledWord("ENTER", "mem_ENTER") 
+\end_layout
+
+\begin_layout Plain Layout
+
+addCompiledWord("EXIT", "mem_EXIT") 
+\end_layout
+
+\begin_layout Plain Layout
+
+;>endpy 
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Скриптовий режим не дозволяє виконувати умовні переходи, якщо термінальні
+ конструкції для умовного переходу знаходяться за межами одного скриптового
+ блоку, обмеженого спеціальними коментарями.
+\end_layout
+
+\begin_layout Пункт1
+Додавання нових макросів
+\end_layout
+
+\begin_layout Standard
+Макроси представляють собою функції на мові Python і додаються за допомогою
+ службової процедури 
+\begin_inset Quotes fld
+\end_inset
+
+addMacro
+\begin_inset Quotes frd
+\end_inset
+
+.
+ Макроси бувають двух видів:
+\end_layout
+
+\begin_layout Itemize
+кодозамінюючі
+\end_layout
+
+\begin_layout Itemize
+кодогенеративні
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Перший тип дозволяє робити заміну виклику макросу на текст макросу з відповідним
+ підставлянням аргументів макросу.
+ Другий тип дозволяє задавати процедуру будь-якого рівня складності з аргументам
+и макросу у якості вхідних параметрів.
+\end_layout
+
+\begin_layout Standard
+Приклад створення кодозамінюючого макросу з іменем 
+\begin_inset Quotes fld
+\end_inset
+
+ldiw
+\begin_inset Quotes frd
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+## `ldiw temp, imm16 
+\end_layout
+
+\begin_layout Plain Layout
+
+# temp - register (r16-r30, only even, may be X Y Z) 
+\end_layout
+
+\begin_layout Plain Layout
+
+addMacro("ldiw", """ 	
+\end_layout
+
+\begin_layout Plain Layout
+
+	ldi @0L, low(@1) 	
+\end_layout
+
+\begin_layout Plain Layout
+
+	ldi @0H, high(@1) 
+\end_layout
+
+\begin_layout Plain Layout
+
+""")  
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Приклад створення кодогенеруючого макросу з іменем 
+\begin_inset Quotes fld
+\end_inset
+
+COMPILE_RAW
+\begin_inset Quotes frd
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+addMacro("COMPILE_RAW", lambda text: True and
+\end_layout
+
+\begin_layout Plain Layout
+
+	pasteMacro("
+\backslash
+n".join(["
+\backslash
+t
+\backslash
+t.dw {0}"
+\end_layout
+
+\begin_layout Plain Layout
+
+							.format(iif(wordDictHasKey(x),
+\end_layout
+
+\begin_layout Plain Layout
+
+									lambda:FUNCS["rammap"](wordDictF(x)),
+\end_layout
+
+\begin_layout Plain Layout
+
+									lambda:x)())
+\end_layout
+
+\begin_layout Plain Layout
+
+						for x in eval(text).split()]),
+\end_layout
+
+\begin_layout Plain Layout
+
+				True, True) ) 
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Пункт1
+Додавання нових функцій
+\end_layout
+
+\begin_layout Standard
+Функції відрізняються від макросів тим, що вони можуть використовуватись
+ в середині рядка.
+ Таке проекте рішення прийнято з єдиною метою — спрощення фази аналізу макропреп
+роцесора.
+ Функції, як і макроси, можуть бути кодозамінними, так і кодогенеративними.
+\end_layout
+
+\begin_layout Standard
+Приклад функції приведено у лістингу:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+## "rammap" converts address in flash to address in RAM after 
+\end_layout
+
+\begin_layout Plain Layout
+
+## loading program to RAM 
+\end_layout
+
+\begin_layout Plain Layout
+
+addFunc("rammap", "(@0 - START_CODE)*2 + WORDS_START") 
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Пункт1
+Використання макросів і функцій
+\end_layout
+
+\begin_layout Standard
+Для виклику макроса потрібно вказати його назву і аргументи в такому ж стилі,
+ як програмуються мнемоніки асемблера, проте перед назвою макроса поставити
+ символ 
+\begin_inset Quotes fld
+\end_inset
+
+зворотній апостроф
+\begin_inset Quotes frd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+.org 0x40 RESET: 	
+\end_layout
+
+\begin_layout Plain Layout
+
+	; Ініціалізація стеку повернень 
+\end_layout
+
+\begin_layout Plain Layout
+
+	`out SPL, low(RETURN_STACK) 	
+\end_layout
+
+\begin_layout Plain Layout
+
+	`out SPH, high(RETURN_STACK) 
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Для виклику функції потрібно вказати її назву, а аргументи задати в дужках.
+ Перед назвою функції потрібно поставити символ 
+\begin_inset Quotes fld
+\end_inset
+
+октоторп
+\begin_inset Quotes frd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+	sts #rammap(CTIB), ZL
+\end_layout
+
+\begin_layout Plain Layout
+
+	sts #rammap(CTIB)+1, ZH
+\end_layout
+
+\begin_layout Plain Layout
+
+	`store #rammap(_IN), 0 
+\end_layout
+
+\begin_layout Plain Layout
+
+	; Встановити курсор на 0 символ текстового буферу 
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Як видно з прикладу, функції і макроси можна сумісно використовувати при
+ однорівневій глибині вкладеності.
+\end_layout
+
+\begin_layout Подраздел
+Робота з стендом EV8031/AVR
+\end_layout
+
+\begin_layout Standard
+В першу чергу потрібно зазначити, що робота зі стендом довзолена тільки
+ після прочитання інструкції та правил безпеки.
+\end_layout
+
+\begin_layout Standard
+При роботі зі стендом типовими є дві операції: завантаження бінарного коду
+ ядра у ПЗУ мікроконтролера і зв’язок з ядром по COM-порту.
+ Перша операція потребує підключення кабелю від послідовного порту ПК до
+ роз’єму на платі, поряд з мікроконтролером.
+ При підключенні кабелю живлення повинно бути уже під’єднано.
+ При другому типі операцій кабель до послідовного порту ПК повинен бути
+ від’єднаний від плати.
+\end_layout
+
+\begin_layout Пункт1
+Завантаження ядра у мікроконтролер
+\end_layout
+
+\begin_layout Standard
+Завантаження відбувається за допомогою програми avrdude.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+sudo avrdude -p m8515 -U flash:w:main.hex:i -v -c stk201
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Налаштуванню типово підлягають наступні параметри:
+\end_layout
+
+\begin_layout Itemize
+шлях до бінарного коду ядра (у прикладі 
+\begin_inset Quotes fld
+\end_inset
+
+main.hex
+\begin_inset Quotes frd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+тип програматора (у прикладі 
+\begin_inset Quotes fld
+\end_inset
+
+stk201
+\begin_inset Quotes frd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Вихідний код ядра приведено у Додатку В.
+\end_layout
+
+\begin_layout Пункт1
+Налаштування параметрів терміналу
+\end_layout
+
+\begin_layout Standard
+Підключення до терміналу стенду відбувається через утиліти стандарту POSIX,
+ для їх налаштування використовується утиліта stty
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+sudo stty -F /dev/ttyUSB0 9600 raw cs8 -parity
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Змінним параметром є адреса термінального порта, що задається ключем 
+\begin_inset Quotes fld
+\end_inset
+
+-F
+\begin_inset Quotes frd
+\end_inset
+
+ і швидкість передачі.
+\end_layout
+
+\begin_layout Пункт1
+Утворення термінального зв’язку
+\end_layout
+
+\begin_layout Standard
+Термінальний зв’язок утворюється за допомогою наступних утиліт стандарту
+ POSIX:
+\end_layout
+
+\begin_layout Itemize
+echo — для виводу у порт
+\end_layout
+
+\begin_layout Itemize
+cat — для вводу із порту
+\end_layout
+
+\begin_layout Itemize
+перенаправлення потоку даних (оператор 
+\begin_inset Quotes fld
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+>
+\end_layout
+
+\end_inset
+
+
+\begin_inset Quotes frd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+newpage
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Висновки
+\end_layout
+
+\begin_layout Standard
+В даній роботі було розглянуто способи створення Форт інтепретатора для
+ мікроконтролерів AVR.
+ В результаті було отримано робочу реалізацію, готову для використання.
+ Отримана Форт-система має необхідну гнучкість для подальшого розширення.
+\end_layout
+
+\begin_layout Standard
+Було проведено дослід по модифікації програмного середовища під проект.
+ Отримано наступні результати:
+\end_layout
+
+\begin_layout Itemize
+на синтаксичний аналізатор витрачено 24 людино-години (3 дні)
+\end_layout
+
+\begin_layout Itemize
+отримано набагато більш потужний препроцесор, ніж йде по змовчуванню із
+ більшістю сучасних асемблерів
+\end_layout
+
+\begin_layout Itemize
+зекономлено час на створення програмних конструкцій певного вигляду і спрощено
+ підтримку коду в майбутньому
+\end_layout
+
+\begin_layout Itemize
+закладено можливість декларативного налаштування кодогенерації
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Оскільки робота завершена і позитивні результати отримані, дослід вважається
+ успішним і дана технологія рекомендується для подальшої перевірки на робочому
+ проекті.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+newpage
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Простое
+Лістинг коду програми завантажувача
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+lstinputlisting{testing.py}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Простое
+Лістинг коду макропрепроцесора
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+lstinputlisting{macroasm.py}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Простое
+Лістинг коду основної програми
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+lstset{ %
+\end_layout
+
+\begin_layout Plain Layout
+
+  language=[x86masm]Assembler,
+\end_layout
+
+\begin_layout Plain Layout
+
+  alsolanguage=Python,
+\end_layout
+
+\begin_layout Plain Layout
+
+  tabsize=4
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+lstinputlisting{standforth.asm}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+newpage 
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{thebibliography}{99}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+bibitem{1} Баранов~С.~Н., Ноздрунов~Н.~Р.
+ Язык Форт и его реализации.
+ "--- М.: Наука и техника, 1989.
+ "--- 108~c.
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+bibitem{2} Семенов~Ю.~А..
+ Программирование на языке Форт.
+ "--- М.: Наука и техника, 1992.
+ "--- 75~c.
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+bibitem{3} Leo Brodie.
+ Starting Forth.
+ "--- S.: Forth FIG Group, 1981.
+ "--- 208~c.
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+bibitem{4} Leo Brodie.
+ Thinking Forth.
+ "--- S.: Forth FIG Group, 1985.
+ "--- 420~c.
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+bibitem{5} Мікроконтролери AVR.
+ Конпект лекцій.
+ Укладач --- Новацький О.А.
+ М.:НТУУ <<КПІ>>
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+bibitem{6} Brad Rodriguez.
+ Porting Forth.
+ Serie of web-published articles.
+ 1993.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{thebibliography}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
